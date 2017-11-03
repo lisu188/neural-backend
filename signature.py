@@ -30,7 +30,7 @@ def test_network():
                 else:
                     neural.add_train(list(convert_pattern(pattern)), get_output(current_set, num_sets))
 
-        neural.train(10000)
+        neural.train(1000)
         neural.log()
         while True:
             answer = neural.use(get_signature())[0]
