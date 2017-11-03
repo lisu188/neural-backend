@@ -32,9 +32,10 @@ def test_network():
 
         neural.train(1000)
         neural.log()
-        while True:
-            answer = neural.use(get_signature())[0]
-            max_index, max_value = max(enumerate(answer), key=operator.itemgetter(1))
-            print(all_data[max_index][0], max_value)
+        answer = neural.use(get_signature())[0]
+        max_index, max_value = max(enumerate(answer), key=operator.itemgetter(1))
+        print(all_data[max_index][0], max_value)
 
 
+if __name__ == '__main__':
+    test_network()
