@@ -23,7 +23,6 @@ class Network:
         self.X = tf.placeholder("float", [None, self.num_input])
         self.Y = tf.placeholder("float", [None, self.num_classes])
 
-
         self.logits = self.build_net()
         self.prediction = tf.nn.softmax(self.logits)
 
@@ -48,9 +47,7 @@ class Network:
     def log(self):
         loss, acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input_test,
                                                                                self.Y: self.output_test})
-        print("Step " + str(self.steps) + ", Minibatch Loss= " +
-              "{:.4f}".format(loss) + ", Training Accuracy= " +
-              "{:.3f}".format(acc))
+        return {"step": self.steps, "loss": loss.item(), "acc": acc.item()}
 
     def use(self, pattern):
         return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern(pattern))]})

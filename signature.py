@@ -2,12 +2,14 @@ import operator
 from random import randint
 
 import tensorflow
+from flask import Flask
 
 from data.conversion import convert_pattern
 from data.pattern import add_pattern, load_all
 from engine.network import Network
 from engine.runner import get_output
 from gui.board import Board
+from rest.server import NeuralRestEnginge
 
 
 def save_signature(name, n=-1):
@@ -38,4 +40,4 @@ def test_network():
 
 
 if __name__ == '__main__':
-    test_network()
+    NeuralRestEnginge().run_server()
