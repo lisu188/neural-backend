@@ -1,6 +1,9 @@
+import json
 import time
 import tkinter as tk
 from functools import partial
+
+import requests
 
 
 class Board:
@@ -38,4 +41,8 @@ class Board:
 
 
 if __name__ == '__main__':
-    Board().capture(5)
+    def cb(data):
+        print(requests.post("http://127.0.0.1:5000/use", data=json.dumps(data)).json())
+
+
+    Board(cb).capture(-1)
