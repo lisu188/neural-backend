@@ -10,10 +10,6 @@ from engine.runner import get_output
 from gui.board import Board
 
 
-def get_signature():
-    return Board().capture(1)[0]
-
-
 def save_signature(name, n=-1):
     add_pattern(name, Board().capture(n))
 
@@ -32,9 +28,13 @@ def test_network():
 
         neural.train(1000)
         neural.log()
-        answer = neural.use(get_signature())[0]
-        max_index, max_value = max(enumerate(answer), key=operator.itemgetter(1))
-        print(all_data[max_index][0], max_value)
+
+        def cb(sign):
+            answer = neural.use(sign)[0]
+            max_index, max_value = max(enumerate(answer), key=operator.itemgetter(1))
+            print(all_data[max_index][0], max_value)
+
+        Board(cb).capture(-1)
 
 
 if __name__ == '__main__':
