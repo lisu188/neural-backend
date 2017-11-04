@@ -13,6 +13,15 @@ from engine.runner import get_output
 
 class NeuralRestEnginge:
     def __init__(self):
+        self.session = None
+        self.all_data = None
+        self.num_sets = None
+        self.neural = None
+        self.reload()
+
+    def reload(self):
+        if self.session:
+            self.session.close()
         self.session = tensorflow.Session()
         self.all_data = load_all()
         self.num_sets = len(self.all_data)
@@ -41,5 +50,14 @@ class NeuralRestEnginge:
             answer = self.neural.use(request.get_json(force=True))[0]
             max_index, max_value = max(enumerate(answer), key=operator.itemgetter(1))
             return jsonify({"pattern": self.all_data[max_index][0], "confidence": max_value.item()})
+
+        @app.route('/reload', methods=["POST"])
+        def reload():
+            self.reload()
+            ret = {}
+            ret['signatures'] = {}
+            for data in self.all_data:
+                ret['signatures'][data[0]] = len(data[1])
+            return jsonify(ret)
 
         app.run(debug=True)
