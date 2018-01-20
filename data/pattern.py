@@ -2,7 +2,7 @@ import json
 import os
 from os.path import basename, splitext
 
-PATH = "pattern_database"
+PATH = "pattern-database"
 
 
 def load_all():
