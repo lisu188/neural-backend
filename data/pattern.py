@@ -2,8 +2,6 @@ import json
 import os
 from os.path import basename, splitext
 
-from gui.board import Board
-
 PATH = "pattern_database"
 
 

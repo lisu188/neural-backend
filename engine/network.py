@@ -2,7 +2,6 @@ import tensorflow as tf
 
 from data.conversion import convert_pattern
 
-series = ['x', 'y', 'vx', 'vy', 'ax', 'ay']
 
 class Network:
     def __init__(self, session, classes):
@@ -15,10 +14,11 @@ class Network:
         self.steps = 0
 
         # Network Parameters
-        self.n_hidden_1 = 30
-        self.n_hidden_2 = 30
-        self.num_input = 100
-        self.num_classes = classes
+        self.n_hidden_1 = 100  # 1st layer number of neurons
+        self.n_hidden_2 = 10  # 2nd layer number of neurons
+        self.num_input = 6000  # MNIST data input (img shape: 28*28)
+        self.num_classes = classes  # MNIST total classes (0-9 digits)
+
         # tf Graph input
         self.X = tf.placeholder("float", [None, self.num_input])
         self.Y = tf.placeholder("float", [None, self.num_classes])
@@ -49,8 +49,8 @@ class Network:
                                                                                self.Y: self.output_test})
         return {"step": self.steps, "loss": loss.item(), "acc": acc.item()}
 
-    def use(self, data):
-        return self.session.run(self.prediction, feed_dict={self.X: [data]})
+    def use(self, pattern):
+        return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern(pattern))]})
 
     def add_train(self, input, output):
         self.input.append(input)

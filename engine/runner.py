@@ -11,3 +11,15 @@ def get_output(index, num_sets):
     return result
 
 
+if __name__ == '__main__':
+    all_data = load_all()
+    num_sets = len(all_data)
+    neural = Network()
+    for current_set in range(num_sets):
+        for pattern in all_data[current_set]:
+            if randint(0,3) == 0:
+                neural.add_test(list(convert_pattern(pattern)), get_output(current_set, num_sets))
+            else:
+                neural.add_train(list(convert_pattern(pattern)), get_output(current_set, num_sets))
+
+    neural.train()
