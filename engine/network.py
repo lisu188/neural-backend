@@ -23,7 +23,6 @@ class Network:
         self.X = tf.placeholder("float", [None, self.num_input])
         self.Y = tf.placeholder("float", [None, self.num_classes])
 
-
         self.logits = self.build_net()
         self.prediction = tf.nn.softmax(self.logits)
 
@@ -74,7 +73,7 @@ class Network:
             'b2': tf.Variable(tf.random_normal([self.n_hidden_2])),
             'out': tf.Variable(tf.random_normal([self.num_classes]))
         }
-        layer_1 = tf.add(tf.matmul(self.X, weights['h1']), biases['b1'])
-        layer_2 = tf.add(tf.matmul(layer_1, weights['h2']), biases['b2'])
-        out_layer = tf.matmul(layer_2, weights['out']) + biases['out']
+        layer_1 = tf.nn.relu(tf.add(tf.matmul(self.X, weights['h1']), biases['b1']))
+        layer_2 = tf.nn.relu(tf.add(tf.matmul(layer_1, weights['h2']), biases['b2']))
+        out_layer = tf.nn.relu(tf.add(tf.matmul(layer_2, weights['out']), biases['out']))
         return out_layer
