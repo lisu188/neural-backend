@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+from data import config
 from data.conversion import convert_pattern
 
 
@@ -14,10 +15,10 @@ class Network:
         self.steps = 0
 
         # Network Parameters
-        self.n_hidden_1 = 100  # 1st layer number of neurons
-        self.n_hidden_2 = 10  # 2nd layer number of neurons
-        self.num_input = 6000  # MNIST data input (img shape: 28*28)
-        self.num_classes = classes  # MNIST total classes (0-9 digits)
+        self.n_hidden_1 = 100
+        self.n_hidden_2 = 10
+        self.num_input = config.SIZE * 6
+        self.num_classes = classes
 
         # tf Graph input
         self.X = tf.placeholder("float", [None, self.num_input])
@@ -47,9 +48,7 @@ class Network:
     def log(self):
         loss, acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input_test,
                                                                                self.Y: self.output_test})
-        print("Step " + str(self.steps) + ", Minibatch Loss= " +
-              "{:.4f}".format(loss) + ", Training Accuracy= " +
-              "{:.3f}".format(acc))
+        return {"step": self.steps, "loss": loss.item(), "acc": acc.item()}
 
     def use(self, pattern):
         return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern(pattern))]})

@@ -1,3 +1,4 @@
+from data import config
 from data.normalize import differentiate, normalize, quantize
 from data.pattern import load_pattern
 
@@ -10,9 +11,9 @@ def get_element(data, index):
 
 
 def convert_pattern(data):
-    x = quantize(get_element(data, 0), 1000)
-    y = quantize(get_element(data, 1), 1000)
-    t = quantize(get_element(data, 2), 1000)
+    x = quantize(get_element(data, 0), config.SIZE)
+    y = quantize(get_element(data, 1), config.SIZE)
+    t = quantize(get_element(data, 2), config.SIZE)
     vx = differentiate(x, t)
     vy = differentiate(y, t)
     ax = differentiate(vx, t)
