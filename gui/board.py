@@ -17,7 +17,7 @@ class Board:
         self.callback = callback
 
     def motion(self, n, event):
-        if event.state == 256:
+        if event.state == 264:
             if not self.in_progress:
                 self.in_progress = True
                 self.start_time = time.time()
@@ -25,7 +25,7 @@ class Board:
             x1, y1 = (event.x - 1), (event.y - 1)
             x2, y2 = (event.x + 1), (event.y + 1)
             self.canvas.create_oval(x1, y1, x2, y2)
-        elif event.state == 0 and self.in_progress and len(self.coords):
+        elif event.state == 8 and self.in_progress and len(self.coords):
             self.in_progress = False
             self.all_coords.append(self.coords)
             self.callback(self.coords)

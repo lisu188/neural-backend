@@ -61,6 +61,18 @@ class Network:
         self.input_test.append(input)
         self.output_test.append(output)
 
+    def variable_summaries(self, var):
+        """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""
+        with tf.name_scope('summaries'):
+            mean = tf.reduce_mean(var)
+            tf.summary.scalar('mean', mean)
+            with tf.name_scope('stddev'):
+                stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)))
+            tf.summary.scalar('stddev', stddev)
+            tf.summary.scalar('max', tf.reduce_max(var))
+            tf.summary.scalar('min', tf.reduce_min(var))
+            tf.summary.histogram('histogram', var)
+
     def build_net(self):
         weights = {
             'h1': tf.Variable(tf.random_normal([self.num_input, self.n_hidden_1])),
@@ -75,4 +87,18 @@ class Network:
         layer_1 = tf.nn.relu(tf.add(tf.matmul(self.X, weights['h1']), biases['b1']))
         layer_2 = tf.nn.relu(tf.add(tf.matmul(layer_1, weights['h2']), biases['b2']))
         out_layer = tf.nn.relu(tf.add(tf.matmul(layer_2, weights['out']), biases['out']))
+        with tf.name_scope('weights'):
+            with tf.name_scope('h1'):
+                self.variable_summaries(weights['h1'])
+            with tf.name_scope('h2'):
+                self.variable_summaries(weights['h2'])
+            with tf.name_scope('out'):
+                self.variable_summaries(weights['out'])
+        with tf.name_scope('biases'):
+            with tf.name_scope('b1'):
+                self.variable_summaries(biases['b1'])
+            with tf.name_scope('b2'):
+                self.variable_summaries(biases['b2'])
+            with tf.name_scope('out'):
+                self.variable_summaries(biases['out'])
         return out_layer
