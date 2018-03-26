@@ -23,12 +23,12 @@ def test_network():
         neural = Network(sess, num_sets)
         for current_set, pattern_set in enumerate(all_data):
             for pattern in pattern_set[1]:
-                if randint(0, 1) == 0:
+                if randint(0, 3) == 0:
                     neural.add_test(list(convert_pattern(pattern)), get_output(current_set, num_sets))
                 else:
                     neural.add_train(list(convert_pattern(pattern)), get_output(current_set, num_sets))
 
-        neural.train(1000)
+        neural.train(100000)
         print(neural.log())
 
         def cb(sign):

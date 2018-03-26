@@ -27,7 +27,7 @@ class Network:
         self.logits = self.build_net()
         self.prediction = tf.nn.softmax(self.logits)
 
-        self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
+        self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
             logits=self.logits, labels=self.Y))
         optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate)
         self.train_op = optimizer.minimize(self.loss_op)
@@ -35,20 +35,46 @@ class Network:
         self.correct_pred = tf.equal(tf.argmax(self.prediction, 1), tf.argmax(self.Y, 1))
         self.accuracy = tf.reduce_mean(tf.cast(self.correct_pred, tf.float32))
 
+        with tf.name_scope('main'):
+            tf.summary.scalar('loss', self.loss_op)
+            tf.summary.scalar('accuracy', self.accuracy)
+
+        self.merged = tf.summary.merge_all()
+        self.train_writer = tf.summary.FileWriter('./tensorboard/train',
+                                                  self.session.graph)
+        self.test_writer = tf.summary.FileWriter('./tensorboard/test',
+                                                 self.session.graph)
+
         self.init = tf.global_variables_initializer()
 
         self.session.run(self.init)
 
     def train(self, steps):
         for step in range(0, steps):
-            self.session.run(self.train_op, feed_dict={self.X: self.input,
-                                                       self.Y: self.output})
+            self.session.run(self.train_op,
+                             feed_dict={self.X: self.input,
+                                        self.Y: self.output})
+            train_summary = self.session.run(self.merged,
+                                             feed_dict={self.X: self.input,
+                                                        self.Y: self.output})
+            test_summary = self.session.run(self.merged,
+                                            feed_dict={self.X: self.input_test,
+                                                       self.Y: self.output_test})
+            self.train_writer.add_summary(train_summary, step)
+            self.test_writer.add_summary(test_summary, step)
+            if step % 1000 == 0:
+                print("Training step: " + str(step))
+                print(self.log())
         self.steps = self.steps + steps
 
     def log(self):
-        loss, acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input_test,
-                                                                               self.Y: self.output_test})
-        return {"step": self.steps, "loss": loss.item(), "acc": acc.item()}
+        loss, acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input,
+                                                                               self.Y: self.output})
+
+        test_loss, test_acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input_test,
+                                                                                         self.Y: self.output_test})
+        return {"step": self.steps, "loss": loss.item(), "acc": acc.item(), "test_loss": test_loss.item(),
+                "test_acc": test_acc.item()}
 
     def use(self, pattern):
         return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern(pattern))]})
@@ -61,17 +87,20 @@ class Network:
         self.input_test.append(input)
         self.output_test.append(output)
 
+    # def variable_summaries(self, var):
+    #     with tf.name_scope('summaries'):
+    #         mean = tf.reduce_mean(var)
+    #         tf.summary.scalar('mean', mean)
+    #         with tf.name_scope('stddev'):
+    #             stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)))
+    #         tf.summary.scalar('stddev', stddev)
+    #         tf.summary.scalar('max', tf.reduce_max(var))
+    #         tf.summary.scalar('min', tf.reduce_min(var))
+    #         tf.summary.histogram('histogram', var)
+
+    # T
     def variable_summaries(self, var):
-        """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""
-        with tf.name_scope('summaries'):
-            mean = tf.reduce_mean(var)
-            tf.summary.scalar('mean', mean)
-            with tf.name_scope('stddev'):
-                stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)))
-            tf.summary.scalar('stddev', stddev)
-            tf.summary.scalar('max', tf.reduce_max(var))
-            tf.summary.scalar('min', tf.reduce_min(var))
-            tf.summary.histogram('histogram', var)
+        pass
 
     def build_net(self):
         weights = {
