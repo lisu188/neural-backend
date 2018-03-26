@@ -4,6 +4,7 @@ from random import randint
 import tensorflow
 from flask import Flask
 
+from data import config
 from data.conversion import convert_pattern
 from data.pattern import add_pattern, load_all
 from engine.network import Network
@@ -20,7 +21,7 @@ def test_network():
     with tensorflow.Session() as sess:
         all_data = load_all()
         num_sets = len(all_data)
-        neural = Network(sess, num_sets)
+        neural = Network(sess, config.SIZE * 2, num_sets)
         for current_set, pattern_set in enumerate(all_data):
             for pattern in pattern_set[1]:
                 if randint(0, 3) == 0:

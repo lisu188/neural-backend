@@ -1,3 +1,5 @@
+from random import shuffle
+
 import tensorflow as tf
 
 from data import config
@@ -5,19 +7,18 @@ from data.conversion import convert_pattern
 
 
 class Network:
-    def __init__(self, session, classes):
+    def __init__(self, session, inputs, classes):
         self.session = session
         self.output_test = []
         self.input_test = []
         self.output = []
         self.input = []
-        self.learning_rate = 0.001
         self.steps = 0
 
         # Network Parameters
-        self.n_hidden_1 = 100
-        self.n_hidden_2 = 10
-        self.num_input = config.SIZE * 6
+        self.n_hidden_1 = 75
+        self.n_hidden_2 = 25
+        self.num_input = inputs
         self.num_classes = classes
 
         # tf Graph input
@@ -29,7 +30,7 @@ class Network:
 
         self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
             logits=self.logits, labels=self.Y))
-        optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate)
+        optimizer = tf.train.AdamOptimizer(learning_rate=0.00001)
         self.train_op = optimizer.minimize(self.loss_op)
 
         self.correct_pred = tf.equal(tf.argmax(self.prediction, 1), tf.argmax(self.Y, 1))
@@ -98,9 +99,9 @@ class Network:
     #         tf.summary.scalar('min', tf.reduce_min(var))
     #         tf.summary.histogram('histogram', var)
 
-    # T
-    def variable_summaries(self, var):
-        pass
+    # # T
+    # def variable_summaries(self, var):
+    #     pass
 
     def build_net(self):
         weights = {
@@ -116,18 +117,21 @@ class Network:
         layer_1 = tf.nn.relu(tf.add(tf.matmul(self.X, weights['h1']), biases['b1']))
         layer_2 = tf.nn.relu(tf.add(tf.matmul(layer_1, weights['h2']), biases['b2']))
         out_layer = tf.nn.relu(tf.add(tf.matmul(layer_2, weights['out']), biases['out']))
-        with tf.name_scope('weights'):
-            with tf.name_scope('h1'):
-                self.variable_summaries(weights['h1'])
-            with tf.name_scope('h2'):
-                self.variable_summaries(weights['h2'])
-            with tf.name_scope('out'):
-                self.variable_summaries(weights['out'])
-        with tf.name_scope('biases'):
-            with tf.name_scope('b1'):
-                self.variable_summaries(biases['b1'])
-            with tf.name_scope('b2'):
-                self.variable_summaries(biases['b2'])
-            with tf.name_scope('out'):
-                self.variable_summaries(biases['out'])
+        # tf.summary.histogram('layer1', layer_1)
+        # tf.summary.histogram('layer2', layer_2)
+        # tf.summary.histogram('out', out_layer)
+        # with tf.name_scope('weights'):
+        #     with tf.name_scope('h1'):
+        #         self.variable_summaries(weights['h1'])
+        #     with tf.name_scope('h2'):
+        #         self.variable_summaries(weights['h2'])
+        #     with tf.name_scope('out'):
+        #         self.variable_summaries(weights['out'])
+        # with tf.name_scope('biases'):
+        #     with tf.name_scope('b1'):
+        #         self.variable_summaries(biases['b1'])
+        #     with tf.name_scope('b2'):
+        #         self.variable_summaries(biases['b2'])
+        #     with tf.name_scope('out'):
+        #         self.variable_summaries(biases['out'])
         return out_layer

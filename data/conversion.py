@@ -16,10 +16,10 @@ def convert_pattern(data):
     t = quantize(get_element(data, 2), config.SIZE)
     vx = differentiate(x, t)
     vy = differentiate(y, t)
-    ax = differentiate(vx, t)
-    ay = differentiate(vy, t)
+    # ax = differentiate(vx, t)
+    # ay = differentiate(vy, t)
 
-    for val in map(normalize, (x, y, vx, vy, ax, ay)):
+    for val in map(normalize, (vx, vy)):
         yield from val
 
 
