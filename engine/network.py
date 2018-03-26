@@ -30,7 +30,7 @@ class Network:
 
         self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
             logits=self.logits, labels=self.Y))
-        optimizer = tf.train.AdamOptimizer(learning_rate=0.00001)
+        optimizer = tf.train.AdamOptimizer(learning_rate=0.000001)
         self.train_op = optimizer.minimize(self.loss_op)
 
         self.correct_pred = tf.equal(tf.argmax(self.prediction, 1), tf.argmax(self.Y, 1))
