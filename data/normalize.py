@@ -44,7 +44,7 @@ def quantize(data, dest_len):
 def normalize(data):
     local_min = min(data)
     local_max = max(data) - local_min
-    return list(map(lambda x: x / local_max, map(lambda x: x - local_min, data)))
+    return list(map(lambda x: (x - 0.5) * 2, map(lambda x: x / local_max, map(lambda x: x - local_min, data))))
 
 
 def differentiate(dx, dt):
@@ -53,6 +53,12 @@ def differentiate(dx, dt):
     for i in range(len(dx) - 1):
         result.append((dx[i + 1] - dx[i]) / (dt[i + 1] - dt[i]))
     return savitzky_golay(quantize(result, len(dx)), 51, 3)
+
+
+def square_mean(x, y):
+    assert (len(x) == len(y))
+    for x, y in zip(x, y):
+        yield math.sqrt(x * x + y * y)
 
 
 if __name__ == '__main__':

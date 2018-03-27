@@ -1,5 +1,5 @@
 from data import config
-from data.normalize import differentiate, normalize, quantize
+from data.normalize import differentiate, normalize, quantize, square_mean
 from data.pattern import load_pattern
 
 
@@ -18,9 +18,9 @@ def convert_pattern(data):
     vy = differentiate(y, t)
     # ax = differentiate(vx, t)
     # ay = differentiate(vy, t)
-
-    for val in map(normalize, (vx, vy)):
-        yield from val
+    yield from normalize(list(square_mean(vx, vy)))
+    # for val in map(normalize, (vx, vy)):
+    #     yield from val
 
 
 if __name__ == '__main__':

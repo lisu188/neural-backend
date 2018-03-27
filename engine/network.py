@@ -1,13 +1,13 @@
 from random import shuffle
 
 import tensorflow as tf
-
+from math import sqrt
 from data.conversion import convert_pattern
 
 
 class Network:
     def __init__(self, session, inputs, classes):
-        self.seq_len = 25
+        self.seq_len = 5
         self.session = session
         self.output_test = []
         self.input_test = []
@@ -15,9 +15,6 @@ class Network:
         self.input = []
         self.steps = 0
 
-        # Network Parameters
-        self.n_hidden_1 = 75
-        self.n_hidden_2 = 25
         self.num_input = inputs
         self.num_classes = classes
 
@@ -25,12 +22,13 @@ class Network:
         self.X = tf.placeholder("float", [None, self.num_input])
         self.Y = tf.placeholder("float", [None, self.num_classes])
 
-        self.logits = self.build_net()
+        self.logits = self.build_net(inputs, int(sqrt(inputs * sqrt(inputs * classes))), int(sqrt(inputs * classes)),
+                                     int(sqrt(sqrt(inputs * classes) * classes)), classes)
         self.prediction = tf.nn.softmax(self.logits)
 
         self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
             logits=self.logits, labels=self.Y))
-        optimizer = tf.train.AdamOptimizer()
+        optimizer = tf.train.AdamOptimizer(learning_rate=0.000001)
         self.train_op = optimizer.minimize(self.loss_op)
 
         self.correct_pred = tf.equal(tf.argmax(self.prediction, 1), tf.argmax(self.Y, 1))
@@ -98,52 +96,29 @@ class Network:
         self.input_test.append(input)
         self.output_test.append(output)
 
-    # def variable_summaries(self, var):
-    #     with tf.name_scope('summaries'):
-    #         mean = tf.reduce_mean(var)
-    #         tf.summary.scalar('mean', mean)
-    #         with tf.name_scope('stddev'):
-    #             stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)))
-    #         tf.summary.scalar('stddev', stddev)
-    #         tf.summary.scalar('max', tf.reduce_max(var))
-    #         tf.summary.scalar('min', tf.reduce_min(var))
-    #         tf.summary.histogram('histogram', var)
+    def variable_summaries(self, var, name):
+        with tf.name_scope(name):
+            tf.summary.scalar('mean', tf.reduce_mean(var))
+            tf.summary.scalar('stddev', tf.sqrt(tf.reduce_mean(tf.square(var - tf.reduce_mean(var)))))
+            tf.summary.scalar('max', tf.reduce_max(var))
+            tf.summary.scalar('min', tf.reduce_min(var))
+            tf.summary.histogram('histogram', var)
 
-    # # T
-    # def variable_summaries(self, var):
-    #     pass
+    def build_layer(self, name, input, output, previousLayer):
+        with tf.name_scope(name):
+            weights = tf.Variable(name='weight', initial_value=tf.random_normal([input, output]))
+            biases = tf.Variable(name='bias', initial_value=tf.random_normal([output]))
+            layer = tf.nn.relu(
+                tf.add(tf.matmul(previousLayer, weights),
+                       biases))
+            self.variable_summaries(weights, 'weights')
+            self.variable_summaries(biases, 'biases')
+            tf.summary.histogram('activation', layer)
+            return layer
 
-    def build_net(self):
-        with tf.name_scope('layer1'):
-            layer_1 = tf.nn.relu(
-                tf.add(tf.matmul(self.X, tf.Variable(name='weight', initial_value=tf.random_normal(
-                    [self.num_input, self.n_hidden_1]))),
-                       tf.Variable(name='bias', initial_value=tf.random_normal([self.n_hidden_1]))))
-        with tf.name_scope('layer2'):
-            layer_2 = tf.nn.relu(
-                tf.add(tf.matmul(layer_1, tf.Variable(name='weight', initial_value=tf.random_normal(
-                    [self.n_hidden_1, self.n_hidden_2]))),
-                       tf.Variable(name='bias', initial_value=tf.random_normal([self.n_hidden_2]))))
-        with tf.name_scope('out'):
-            out_layer = tf.nn.relu(
-                tf.add(tf.matmul(layer_2, tf.Variable(name='weight', initial_value=tf.random_normal(
-                    [self.n_hidden_2, self.num_classes]))),
-                       tf.Variable(name='bias', initial_value=tf.random_normal([self.num_classes]))))
-        # tf.summary.histogram('layer1', layer_1)
-        # tf.summary.histogram('layer2', layer_2)
-        # tf.summary.histogram('out', out_layer)
-        # with tf.name_scope('weights'):
-        #     with tf.name_scope('h1'):
-        #         self.variable_summaries(weights['h1'])
-        #     with tf.name_scope('h2'):
-        #         self.variable_summaries(weights['h2'])
-        #     with tf.name_scope('out'):
-        #         self.variable_summaries(weights['out'])
-        # with tf.name_scope('biases'):
-        #     with tf.name_scope('b1'):
-        #         self.variable_summaries(biases['b1'])
-        #     with tf.name_scope('b2'):
-        #         self.variable_summaries(biases['b2'])
-        #     with tf.name_scope('out'):
-        #         self.variable_summaries(biases['out'])
-        return out_layer
+    def build_net(self, *struct):
+        with tf.name_scope('layers'):
+            net = self.X
+            for i in range(len(struct) - 1):
+                net = self.build_layer('layer' + str(i), struct[i], struct[i + 1], net)
+            return net
