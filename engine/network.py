@@ -1,5 +1,6 @@
 from random import shuffle
 
+import shutil
 import tensorflow as tf
 from math import sqrt
 from data.conversion import convert_pattern
@@ -28,7 +29,7 @@ class Network:
 
         self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
             logits=self.logits, labels=self.Y))
-        optimizer = tf.train.AdamOptimizer(learning_rate=0.000001)
+        optimizer = tf.train.AdamOptimizer()
         self.train_op = optimizer.minimize(self.loss_op)
 
         self.correct_pred = tf.equal(tf.argmax(self.prediction, 1), tf.argmax(self.Y, 1))
@@ -39,6 +40,8 @@ class Network:
             tf.summary.scalar('accuracy', self.accuracy)
 
         self.merged = tf.summary.merge_all()
+        # TODO:
+        shutil.rmtree("./tensorboard")
         self.train_writer = tf.summary.FileWriter('./tensorboard/train',
                                                   self.session.graph)
         self.test_writer = tf.summary.FileWriter('./tensorboard/test',

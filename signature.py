@@ -3,7 +3,7 @@ from random import randint
 
 import numpy
 import tensorflow
-
+import argparse
 from data import config
 from data.conversion import convert_pattern
 from data.pattern import add_pattern, load_all
@@ -16,7 +16,7 @@ def save_signature(name, n=-1):
     add_pattern(name, Board().capture(n))
 
 
-def test_network():
+def test_network(ite):
     with tensorflow.Session() as sess:
         all_data = load_all()
         num_sets = len(all_data)
@@ -33,7 +33,7 @@ def test_network():
         #     neural.add_train(numpy.random.rand(config.SIZE), [0] * num_sets)
         # for i in range(100):
         #     neural.add_test(numpy.random.rand(config.SIZE), [0] * num_sets)
-        neural.train(100000)
+        neural.train(ite)
         print(neural.log())
 
         def cb(sign):
@@ -45,4 +45,19 @@ def test_network():
 
 
 if __name__ == '__main__':
-    test_network()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--save", type=str,
+                        help="save pattern with given name")
+    parser.add_argument("--train", type=int,
+                        help="train network for given number of iterations")
+    parser.add_argument("--stats",
+                        help="show database statistics", action="store_true")
+
+    args = parser.parse_args()
+    if args.save:
+        save_signature(args.save)
+    elif args.train:
+        test_network(args.train)
+    elif args.stats:
+        for val in load_all():
+            print(val[0], len(val[1]))
