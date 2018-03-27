@@ -2,12 +2,12 @@ from random import shuffle
 
 import tensorflow as tf
 
-from data import config
 from data.conversion import convert_pattern
 
 
 class Network:
     def __init__(self, session, inputs, classes):
+        self.seq_len = 25
         self.session = session
         self.output_test = []
         self.input_test = []
@@ -30,7 +30,7 @@ class Network:
 
         self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
             logits=self.logits, labels=self.Y))
-        optimizer = tf.train.AdamOptimizer(learning_rate=0.000001)
+        optimizer = tf.train.AdamOptimizer()
         self.train_op = optimizer.minimize(self.loss_op)
 
         self.correct_pred = tf.equal(tf.argmax(self.prediction, 1), tf.argmax(self.Y, 1))
@@ -52,9 +52,9 @@ class Network:
 
     def train(self, steps):
         for step in range(0, steps):
-            self.session.run(self.train_op,
-                             feed_dict={self.X: self.input,
-                                        self.Y: self.output})
+            for dict in self.sequence():
+                self.session.run(self.train_op,
+                                 feed_dict=dict)
             train_summary = self.session.run(self.merged,
                                              feed_dict={self.X: self.input,
                                                         self.Y: self.output})
@@ -67,6 +67,16 @@ class Network:
                 print("Training step: " + str(step))
                 print(self.log())
         self.steps = self.steps + steps
+
+    def sequence(self):
+        packs = list(zip(self.input, self.output))
+        shuffle(packs)
+        pack_len = len(packs)
+        for i in range((pack_len // self.seq_len) + 1):
+            first_index = i * self.seq_len
+            last_index = pack_len if (i + 1) * self.seq_len > pack_len else (i + 1) * self.seq_len
+            yield {self.X: list(map(lambda x: x[0], packs[first_index:last_index])),
+                   self.Y: list(map(lambda x: x[1], packs[first_index:last_index]))}
 
     def log(self):
         loss, acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input,

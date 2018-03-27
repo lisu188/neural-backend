@@ -22,9 +22,10 @@ def test_network():
         all_data = load_all()
         num_sets = len(all_data)
         neural = Network(sess, config.SIZE * 2, num_sets)
+        neural.add_test([0] * config.SIZE * 2, [0] * num_sets)
         for current_set, pattern_set in enumerate(all_data):
             for pattern in pattern_set[1]:
-                if randint(0, 3) == 0:
+                if False:
                     neural.add_test(list(convert_pattern(pattern)), get_output(current_set, num_sets))
                 else:
                     neural.add_train(list(convert_pattern(pattern)), get_output(current_set, num_sets))
