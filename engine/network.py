@@ -114,19 +114,21 @@ class Network:
     #     pass
 
     def build_net(self):
-        weights = {
-            'h1': tf.Variable(tf.random_normal([self.num_input, self.n_hidden_1])),
-            'h2': tf.Variable(tf.random_normal([self.n_hidden_1, self.n_hidden_2])),
-            'out': tf.Variable(tf.random_normal([self.n_hidden_2, self.num_classes]))
-        }
-        biases = {
-            'b1': tf.Variable(tf.random_normal([self.n_hidden_1])),
-            'b2': tf.Variable(tf.random_normal([self.n_hidden_2])),
-            'out': tf.Variable(tf.random_normal([self.num_classes]))
-        }
-        layer_1 = tf.nn.relu(tf.add(tf.matmul(self.X, weights['h1']), biases['b1']))
-        layer_2 = tf.nn.relu(tf.add(tf.matmul(layer_1, weights['h2']), biases['b2']))
-        out_layer = tf.nn.relu(tf.add(tf.matmul(layer_2, weights['out']), biases['out']))
+        with tf.name_scope('layer1'):
+            layer_1 = tf.nn.relu(
+                tf.add(tf.matmul(self.X, tf.Variable(name='weight', initial_value=tf.random_normal(
+                    [self.num_input, self.n_hidden_1]))),
+                       tf.Variable(name='bias', initial_value=tf.random_normal([self.n_hidden_1]))))
+        with tf.name_scope('layer2'):
+            layer_2 = tf.nn.relu(
+                tf.add(tf.matmul(layer_1, tf.Variable(name='weight', initial_value=tf.random_normal(
+                    [self.n_hidden_1, self.n_hidden_2]))),
+                       tf.Variable(name='bias', initial_value=tf.random_normal([self.n_hidden_2]))))
+        with tf.name_scope('out'):
+            out_layer = tf.nn.relu(
+                tf.add(tf.matmul(layer_2, tf.Variable(name='weight', initial_value=tf.random_normal(
+                    [self.n_hidden_2, self.num_classes]))),
+                       tf.Variable(name='bias', initial_value=tf.random_normal([self.num_classes]))))
         # tf.summary.histogram('layer1', layer_1)
         # tf.summary.histogram('layer2', layer_2)
         # tf.summary.histogram('out', out_layer)
