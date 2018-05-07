@@ -1,6 +1,7 @@
+from functools import partial
+
 from data import config
-from data.normalize import differentiate, normalize, quantize, square_mean
-from data.pattern import load_pattern
+from data.normalize import differentiate, normalize, quantize
 
 
 def get_element(data, index):
@@ -10,30 +11,38 @@ def get_element(data, index):
     return result
 
 
-def convert_pattern(data):
-    x = quantize(get_element(data, 0), config.SIZE)
-    y = quantize(get_element(data, 1), config.SIZE)
-    t = quantize(get_element(data, 2), config.SIZE)
+def get_value_list(data, name):
+    ret = []
+    for ob in data:
+        ret.append(ob[name])
+    return ret
+
+
+def compose(a, b):
+    def composed(x):
+        return a(b(x))
+
+    return composed;
+
+
+def convert_pattern(raw_data):
+    sorted_data = sorted(raw_data, key=lambda ob: ob['Timestamp'])
+
+    t = get_value_list(sorted_data, 'Timestamp')
+    x = get_value_list(sorted_data, 'X')
+    y = get_value_list(sorted_data, 'Y')
+    f = get_value_list(sorted_data, 'Force')
+    az = get_value_list(sorted_data, 'AzimuthAngle')
+    al = get_value_list(sorted_data, 'AltitudeAngle')
+
     vx = differentiate(x, t)
     vy = differentiate(y, t)
-    # ax = differentiate(vx, t)
-    # ay = differentiate(vy, t)
-    yield from normalize(list(square_mean(vx, vy)))
-    # for val in map(normalize, (vx, vy)):
-    #     yield from val
+    vf = differentiate(f, t)
+    vaz = differentiate(az, t)
+    val = differentiate(al, t)
 
+    quntizer_op = partial(quantize, config.SIZE)
 
-if __name__ == '__main__':
-    def chart(name, *args):
-        import pygal
-        line_chart = pygal.Line(show_dots=False)
-        for set in args:
-            line_chart.add('', set)
-        line_chart.render_to_file(name + '.svg')
-
-
-    i = 0
-    pattern_name = "counterclockwise"
-    for pattern in load_pattern(pattern_name):
-        chart(pattern_name + str(i), *convert_pattern(pattern))
-        i = i + 1
+    composed = compose(normalize, quntizer_op)
+    for val in map(composed, (vx, vy, vf, vaz, val)):
+        yield from val

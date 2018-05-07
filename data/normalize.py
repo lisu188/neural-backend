@@ -26,7 +26,7 @@ def savitzky_golay(y, window_size, order, deriv=0, rate=1):
     return np.convolve(m[::-1], y, mode='valid')
 
 
-def quantize(data, dest_len):
+def quantize(dest_len, data):
     src_len = len(data)
     ratio = (src_len - 1) / dest_len
 
@@ -52,13 +52,7 @@ def differentiate(dx, dt):
     result = []
     for i in range(len(dx) - 1):
         result.append((dx[i + 1] - dx[i]) / (dt[i + 1] - dt[i]))
-    return savitzky_golay(quantize(result, len(dx)), 51, 3)
-
-
-def square_mean(x, y):
-    assert (len(x) == len(y))
-    for x, y in zip(x, y):
-        yield math.sqrt(x * x + y * y)
+    return savitzky_golay(result, 51, 3)
 
 
 if __name__ == '__main__':
