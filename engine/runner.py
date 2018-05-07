@@ -17,7 +17,6 @@ def build_network(session):
     num_sets = len(all_data)
     neural = Network(session, SIZE * NUM_VECTORS, num_sets)
 
-    # neural.add_test([0] * SIZE * NUM_VECTORS, [0] * num_sets)
     for current_set, pattern_set in enumerate(all_data):
         for pattern in pattern_set[1]:
             if randint(0, 3) == 0:
@@ -25,8 +24,4 @@ def build_network(session):
             else:
                 neural.add_train(list(convert_pattern(pattern)), get_output(current_set, num_sets))
 
-    # for i in range(25):
-    #     neural.add_train(numpy.random.rand(SIZE * NUM_VECTORS), [0] * num_sets)
-    # for i in range(100):
-    #     neural.add_test(numpy.random.rand(config.SIZE), [0] * num_sets)
     return neural

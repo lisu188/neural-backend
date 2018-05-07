@@ -1,2 +1,2 @@
-SIZE = 50
+SIZE = 100
 NUM_VECTORS = 5
