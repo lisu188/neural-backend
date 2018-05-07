@@ -44,8 +44,7 @@ class NeuralRestEngine:
         @app.route('/reload', methods=["POST"])
         def reload():
             self.reload()
-            ret = {}
-            ret['signatures'] = {}
+            ret = {'signatures': {}}
             for data in self.all_data:
                 ret['signatures'][data[0]] = len(data[1])
             return jsonify(ret)
