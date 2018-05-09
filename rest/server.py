@@ -65,13 +65,14 @@ class NeuralRestEngine:
 
             return jsonify(output)
 
-        @app.route('/chart/<name>/<type>/<int:id>/<serie>', methods=['GET'])
-        def chart(name, type, id, serie):
+        @app.route('/chart/<name>/<type>/<int:id>', methods=['GET'])
+        def chart(name, type, id):
             import pygal
             line_chart = pygal.Line(show_dots=False)
             for x, y in load_all():
                 if x == name:
-                    line_chart.add(name, list(convert_pattern_for_chart(y[type][id])[serie]))
+                    for key, val in convert_pattern_for_chart(y[type][id]).items():
+                        line_chart.add(key, list(val))
             return line_chart.render_response()
 
         if 'PORT' in os.environ:
