@@ -1,6 +1,5 @@
 import os
 import shutil
-from math import sqrt
 from random import shuffle
 
 import tensorflow as tf
@@ -24,8 +23,8 @@ class Network:
         self.X = tf.placeholder("float", [None, self.num_input])
         self.Y = tf.placeholder("float", [None, self.num_classes])
 
-        self.logits = self.build_net(inputs, int(sqrt(inputs * sqrt(inputs * classes))), int(sqrt(inputs * classes)),
-                                     int(sqrt(sqrt(inputs * classes) * classes)), classes)
+        self.logits = self.build_net(inputs, 15,
+                                     classes)
         self.prediction = tf.nn.softmax(self.logits)
 
         self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
