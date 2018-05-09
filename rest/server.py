@@ -75,6 +75,15 @@ class NeuralRestEngine:
                         line_chart.add(key, list(val))
             return line_chart.render_response()
 
+        @app.route('/signature/<name>/<type>/<int:id>', methods=['GET'])
+        def signature(name, type, id):
+            import pygal
+            xy_chart = pygal.XY(stroke=False)
+            for x, y in load_all():
+                if x == name:
+                    xy_chart.add(name, list(map(lambda point: (point['X'], -point['Y']), y[type][id])))
+            return xy_chart.render_response()
+
         if 'PORT' in os.environ:
             port = int(os.environ['PORT'])
         else:
