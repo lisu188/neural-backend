@@ -50,7 +50,7 @@ class NeuralRestEngine:
             return jsonify(ret)
 
         if 'PORT' in os.environ:
-            port = os.environ['PORT']
+            port = int(os.environ['PORT'])
         else:
             port = 5000
 
