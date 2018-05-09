@@ -54,6 +54,15 @@ class NeuralRestEngine:
                 ret['signatures'][data[0]]['test'] = len(data[1]['test'])
             return jsonify(ret)
 
+        @app.route('/api', methods=['GET'])
+        def api():
+            output = []
+            for rule in app.url_map.iter_rules():
+                methods = list(filter(lambda x: x != 'HEAD' and x != 'OPTIONS', rule.methods))
+                output.append({"endpoint": str(rule), "methods": methods})
+
+            return jsonify(output)
+
         if 'PORT' in os.environ:
             port = int(os.environ['PORT'])
         else:
