@@ -15,9 +15,10 @@ def build_network(session):
     num_sets = len(all_data)
     neural = Network(session, SIZE * NUM_VECTORS, num_sets)
 
-    for current_set, pattern_set in enumerate(all_data):
-        for pattern in pattern_set[1]['test']:
-            neural.add_test(list(convert_pattern(pattern)), get_output(current_set, num_sets))
-        for pattern in pattern_set[1]['train']:
-            neural.add_train(list(convert_pattern(pattern)), get_output(current_set, num_sets))
+    for current_set_name, pattern_set in all_data.items():
+        current_set_id = list(all_data.keys()).index(current_set_name)
+        for pattern in pattern_set['test']:
+            neural.add_test(list(convert_pattern(pattern)), get_output(current_set_id, num_sets))
+        for pattern in pattern_set['train']:
+            neural.add_train(list(convert_pattern(pattern)), get_output(current_set_id, num_sets))
     return neural

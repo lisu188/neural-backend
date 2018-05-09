@@ -69,19 +69,17 @@ class NeuralRestEngine:
         def chart(name, type, id):
             import pygal
             line_chart = pygal.Line(show_dots=False)
-            for x, y in load_all():
-                if x == name:
-                    for key, val in convert_pattern_for_chart(y[type][id]).items():
-                        line_chart.add(key, list(val))
+            y = load_all()[name]
+            for key, val in convert_pattern_for_chart(y[type][id]).items():
+                line_chart.add(key, list(val))
             return line_chart.render_response()
 
         @app.route('/signature/<name>/<type>/<int:id>', methods=['GET'])
         def signature(name, type, id):
             import pygal
             xy_chart = pygal.XY(stroke=False)
-            for x, y in load_all():
-                if x == name:
-                    xy_chart.add(name, list(map(lambda point: (point['X'], -point['Y']), y[type][id])))
+            y = load_all()[name]
+            xy_chart.add(name, list(map(lambda point: (point['X'], -point['Y']), y[type][id])))
             return xy_chart.render_response()
 
         if 'PORT' in os.environ:

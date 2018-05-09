@@ -66,6 +66,7 @@ def convert_pattern(raw_data):
 
     vx = differentiate(x, t)
     vy = differentiate(y, t)
+    # TODO: do not differentiate, but normalize based on time
     vf = differentiate(f, t)
     vaz = differentiate(az, t)
     val = differentiate(al, t)

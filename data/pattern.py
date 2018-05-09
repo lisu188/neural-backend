@@ -15,7 +15,7 @@ def load_all():
             patterns[dir]['test'].append(json.loads(open(os.path.join(PATH, dir, 'test', file)).read()))
         for file in os.listdir(os.path.join(PATH, dir, 'train')):
             patterns[dir]['train'].append(json.loads(open(os.path.join(PATH, dir, 'train', file)).read()))
-    return patterns.items()
+    return patterns
 
 
 def get_num_classes():

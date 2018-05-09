@@ -5,12 +5,12 @@ from random import shuffle
 
 import tensorflow as tf
 
+from data.config import SEQUENCE_LENGTH
 from data.conversion import convert_pattern
 
 
 class Network:
     def __init__(self, session, inputs, classes):
-        self.seq_len = 5
         self.session = session
         self.output_test = []
         self.input_test = []
@@ -77,9 +77,9 @@ class Network:
         packs = list(zip(self.input, self.output))
         shuffle(packs)
         pack_len = len(packs)
-        for i in range((pack_len // self.seq_len) + 1):
-            first_index = i * self.seq_len
-            last_index = pack_len if (i + 1) * self.seq_len > pack_len else (i + 1) * self.seq_len
+        for i in range((pack_len // SEQUENCE_LENGTH) + 1):
+            first_index = i * SEQUENCE_LENGTH
+            last_index = pack_len if (i + 1) * SEQUENCE_LENGTH > pack_len else (i + 1) * SEQUENCE_LENGTH
             yield {self.X: list(map(lambda x: x[0], packs[first_index:last_index])),
                    self.Y: list(map(lambda x: x[1], packs[first_index:last_index]))}
 
