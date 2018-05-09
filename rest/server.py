@@ -4,6 +4,7 @@ import os
 import tensorflow
 from flask import Flask, jsonify, request
 
+from data.conversion import convert_pattern_for_chart
 from data.pattern import load_all
 from engine.runner import build_network
 
@@ -63,6 +64,15 @@ class NeuralRestEngine:
                 output.append({"endpoint": str(rule), "methods": methods})
 
             return jsonify(output)
+
+        @app.route('/chart/<name>/<type>/<int:id>/<serie>', methods=['GET'])
+        def chart(name, type, id, serie):
+            import pygal
+            line_chart = pygal.Line(show_dots=False)
+            for x, y in load_all():
+                if x == name:
+                    line_chart.add(name, list(convert_pattern_for_chart(y[type][id])[serie]))
+            return line_chart.render_response()
 
         if 'PORT' in os.environ:
             port = int(os.environ['PORT'])

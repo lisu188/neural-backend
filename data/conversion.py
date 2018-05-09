@@ -25,6 +25,35 @@ def compose(a, b):
     return composed;
 
 
+def convert_pattern_for_chart(raw_data):
+    sorted_data = sorted(raw_data, key=lambda ob: ob['Timestamp'])
+
+    t = get_value_list(sorted_data, 'Timestamp')
+    x = get_value_list(sorted_data, 'X')
+    y = get_value_list(sorted_data, 'Y')
+    f = get_value_list(sorted_data, 'Force')
+    az = get_value_list(sorted_data, 'AzimuthAngle')
+    al = get_value_list(sorted_data, 'AltitudeAngle')
+
+    vx = differentiate(x, t)
+    vy = differentiate(y, t)
+    vf = differentiate(f, t)
+    vaz = differentiate(az, t)
+    val = differentiate(al, t)
+
+    quntizer_op = partial(quantize, config.SIZE)
+
+    composed = compose(normalize, quntizer_op)
+
+    return {
+        "vx": composed(vx),
+        "vy": composed(vy),
+        "vf": composed(vf),
+        "vaz": composed(vaz),
+        "val": composed(val),
+    }
+
+
 def convert_pattern(raw_data):
     sorted_data = sorted(raw_data, key=lambda ob: ob['Timestamp'])
 
