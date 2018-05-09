@@ -54,4 +54,4 @@ class NeuralRestEngine:
         else:
             port = 5000
 
-        app.run(debug=True, port=port)
+        app.run(host='0.0.0.0', port=port)
