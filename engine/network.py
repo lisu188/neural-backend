@@ -1,8 +1,10 @@
+import os
+import shutil
+from math import sqrt
 from random import shuffle
 
-import shutil
 import tensorflow as tf
-from math import sqrt
+
 from data.conversion import convert_pattern
 
 
@@ -39,8 +41,11 @@ class Network:
             tf.summary.scalar('accuracy', self.accuracy)
 
         self.merged = tf.summary.merge_all()
-        # TODO:
+
+        if not os.path.exists("./tensorboard"):
+            os.makedirs("./tensorboard")
         shutil.rmtree("./tensorboard")
+
         self.train_writer = tf.summary.FileWriter('./tensorboard/train',
                                                   self.session.graph)
         self.test_writer = tf.summary.FileWriter('./tensorboard/test',
