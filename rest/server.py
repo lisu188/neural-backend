@@ -1,4 +1,5 @@
 import operator
+import os
 
 import tensorflow
 from flask import Flask, jsonify, request
@@ -48,4 +49,9 @@ class NeuralRestEngine:
                 ret['signatures'][data[0]] = len(data[1])
             return jsonify(ret)
 
-        app.run(debug=True)
+        if os.environ['PORT']:
+            port = os.environ['PORT']
+        else:
+            port = 5000
+
+        app.run(debug=True, port=port)
