@@ -1,1 +1,1 @@
-web: python3 signature.py --server
+worker: python3 signature.py --server
