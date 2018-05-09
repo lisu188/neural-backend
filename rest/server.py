@@ -43,10 +43,14 @@ class NeuralRestEngine:
 
         @app.route('/reload', methods=["POST"])
         def reload():
-            self.reload()
+            return jsonify(self.reload())
+
+        @app.route('/stats', methods=['GET'])
+        def stats():
             ret = {'signatures': {}}
             for data in self.all_data:
-                ret['signatures'][data[0]] = len(data[1])
+                ret['signatures'][data[0]]['train'] = len(data[1]['train'])
+                ret['signatures'][data[0]]['test'] = len(data[1]['test'])
             return jsonify(ret)
 
         if 'PORT' in os.environ:
