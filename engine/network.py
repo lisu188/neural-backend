@@ -19,7 +19,6 @@ class Network:
         self.num_input = inputs
         self.num_classes = classes
 
-        # tf Graph input
         self.X = tf.placeholder("float", [None, self.num_input])
         self.Y = tf.placeholder("float", [None, self.num_classes])
 

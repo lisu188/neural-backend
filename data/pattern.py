@@ -8,9 +8,13 @@ EXCLUDED = [".git"]
 def load_all():
     patterns = {}
     for dir in filter(lambda x: x not in EXCLUDED, os.listdir(PATH)):
-        patterns[dir] = []
-        for file in os.listdir(os.path.join(PATH, dir)):
-            patterns[dir].append(json.loads(open(os.path.join(PATH, dir, file)).read()))
+        patterns[dir] = {}
+        patterns[dir]['test'] = []
+        patterns[dir]['train'] = []
+        for file in os.listdir(os.path.join(PATH, dir, 'test')):
+            patterns[dir]['test'].append(json.loads(open(os.path.join(PATH, dir, 'test', file)).read()))
+        for file in os.listdir(os.path.join(PATH, dir, 'train')):
+            patterns[dir]['train'].append(json.loads(open(os.path.join(PATH, dir, 'train', file)).read()))
     return patterns.items()
 
 
