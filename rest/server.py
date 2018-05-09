@@ -23,6 +23,7 @@ class NeuralRestEngine:
         self.all_data = load_all()
         self.num_sets = len(self.all_data)
         self.neural = build_network(self.session)
+        return self.neural.log()
 
     def train(self, steps):
         self.neural.train(steps)
