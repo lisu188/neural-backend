@@ -1,8 +1,8 @@
 import json
 import os
 
-PATH = "pattern-database"
-EXCLUDED = [".git"]
+PATH = "patterns"
+EXCLUDED = []
 
 
 def load_all():
