@@ -49,9 +49,9 @@ class NeuralRestEngine:
                 ret['signatures'][data[0]] = len(data[1])
             return jsonify(ret)
 
-        # if 'PORT' in os.environ:
-        #     port = int(os.environ['PORT'])
-        # else:
-        #     port = 5000
+        if 'PORT' in os.environ:
+            port = int(os.environ['PORT'])
+        else:
+            port = 5000
 
-        app.run(host='0.0.0.0')
+        app.run(port=port)
