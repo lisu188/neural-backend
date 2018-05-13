@@ -1,7 +1,7 @@
 from functools import partial
 
 from data import config
-from data.normalize import differentiate, normalize, quantize
+from data.operations import differentiate, normalize, quantize
 
 
 def get_element(data, index):
@@ -19,39 +19,14 @@ def get_value_list(data, name):
 
 
 def compose(a, b):
-    def composed(x):
+    def _composed(x):
         return a(b(x))
 
-    return composed;
+    return _composed
 
 
-def convert_pattern_for_chart(raw_data):
-    sorted_data = sorted(raw_data, key=lambda ob: ob['Timestamp'])
-
-    t = get_value_list(sorted_data, 'Timestamp')
-    x = get_value_list(sorted_data, 'X')
-    y = get_value_list(sorted_data, 'Y')
-    f = get_value_list(sorted_data, 'Force')
-    az = get_value_list(sorted_data, 'AzimuthAngle')
-    al = get_value_list(sorted_data, 'AltitudeAngle')
-
-    vx = differentiate(x, t)
-    vy = differentiate(y, t)
-    vf = differentiate(f, t)
-    vaz = differentiate(az, t)
-    val = differentiate(al, t)
-
-    quntizer_op = partial(quantize, config.SIZE)
-
-    composed = compose(normalize, quntizer_op)
-
-    return {
-        "vx": composed(vx),
-        "vy": composed(vy),
-        "vf": composed(vf),
-        "vaz": composed(vaz),
-        "val": composed(val),
-    }
+quntizer_op = partial(quantize, config.SIZE)
+composed = compose(normalize, quntizer_op)
 
 
 def convert_pattern(raw_data):
@@ -66,13 +41,20 @@ def convert_pattern(raw_data):
 
     vx = differentiate(x, t)
     vy = differentiate(y, t)
-    # TODO: do not differentiate, but normalize based on time
     vf = differentiate(f, t)
     vaz = differentiate(az, t)
     val = differentiate(al, t)
 
-    quntizer_op = partial(quantize, config.SIZE)
+    return {
+        "vx": composed(vx),
+        "vy": composed(vy),
+        "vf": composed(vf),
+        "vaz": composed(vaz),
+        "val": composed(val),
+    }
 
-    composed = compose(normalize, quntizer_op)
-    for val in map(composed, (vx, vy, vf, vaz, val)):
+
+def convert_pattern_flat(raw_data):
+    bean = convert_pattern(raw_data)
+    for val in map(composed, (bean['vx'], bean['vy'], bean['vf'], bean['vaz'], bean['val'])):
         yield from val

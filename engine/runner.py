@@ -1,5 +1,5 @@
 from data.config import SIZE, NUM_VECTORS
-from data.conversion import convert_pattern
+from data.conversion import convert_pattern_flat
 from data.pattern import load_all
 from engine.network import Network
 
@@ -18,7 +18,7 @@ def build_network(session):
     for current_set_name, pattern_set in all_data.items():
         current_set_id = list(all_data.keys()).index(current_set_name)
         for pattern in pattern_set['test']:
-            neural.add_test(list(convert_pattern(pattern)), get_output(current_set_id, num_sets))
+            neural.add_test(list(convert_pattern_flat(pattern)), get_output(current_set_id, num_sets))
         for pattern in pattern_set['train']:
-            neural.add_train(list(convert_pattern(pattern)), get_output(current_set_id, num_sets))
+            neural.add_train(list(convert_pattern_flat(pattern)), get_output(current_set_id, num_sets))
     return neural

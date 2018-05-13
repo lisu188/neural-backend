@@ -5,7 +5,7 @@ from random import shuffle
 import tensorflow as tf
 
 from data.config import SEQUENCE_LENGTH
-from data.conversion import convert_pattern
+from data.conversion import convert_pattern_flat
 
 
 class Network:
@@ -92,7 +92,7 @@ class Network:
                 "test_acc": test_acc.item()}
 
     def use(self, pattern):
-        return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern(pattern))]})
+        return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern_flat(pattern))]})
 
     def add_train(self, input, output):
         self.input.append(input)

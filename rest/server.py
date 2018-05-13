@@ -4,7 +4,8 @@ import os
 import tensorflow
 from flask import Flask, jsonify, request
 
-from data.conversion import convert_pattern_for_chart
+from data.conversion import convert_pattern
+from data.operations import average_pattern
 from data.pattern import load_all
 from engine.runner import build_network
 
@@ -70,7 +71,25 @@ class NeuralRestEngine:
             import pygal
             line_chart = pygal.Line(show_dots=False)
             y = load_all()[name]
-            for key, val in convert_pattern_for_chart(y[type][id]).items():
+            for key, val in convert_pattern(y[type][id]).items():
+                line_chart.add(key, list(val))
+            return line_chart.render_response()
+
+        @app.route('/chart/<name>/<type>', methods=['GET'])
+        def avg_chart(name, type):
+            import pygal
+            line_chart = pygal.Line(show_dots=False)
+            y = load_all()[name]
+            for key, val in average_pattern(list(map(convert_pattern, y[type]))).items():
+                line_chart.add(key, list(val))
+            return line_chart.render_response()
+
+        @app.route('/chart/<name>', methods=['GET'])
+        def avg_chart_all(name):
+            import pygal
+            line_chart = pygal.Line(show_dots=False)
+            y = load_all()[name]
+            for key, val in average_pattern(list(map(convert_pattern, y['train'] + y['test']))).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
 

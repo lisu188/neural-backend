@@ -47,12 +47,37 @@ def normalize(data):
     return list(map(lambda x: (x - 0.5) * 2, map(lambda x: x / local_max, map(lambda x: x - local_min, data))))
 
 
+def get_value_list(data, name):
+    ret = []
+    for ob in data:
+        ret.append(ob[name])
+    return ret
+
+
 def differentiate(dx, dt):
     assert (len(dx) == len(dt))
     result = []
     for i in range(len(dx) - 1):
         result.append((dx[i + 1] - dx[i]) / (dt[i + 1] - dt[i]))
     return savitzky_golay(result, 51, 3)
+
+
+def average_array(arrays):
+    # TODO: assert all arrays same length
+    result = []
+    for i in range(len(arrays[0])):
+        result.append(sum(map(lambda x: x[i], arrays)) / len(arrays))
+    return result
+
+
+def average_pattern(patterns):
+    return {
+        "vx": average_array(get_value_list(patterns, 'vx')),
+        "vy": average_array(get_value_list(patterns, 'vy')),
+        "vf": average_array(get_value_list(patterns, 'vf')),
+        "vaz": average_array(get_value_list(patterns, 'vaz')),
+        "val": average_array(get_value_list(patterns, 'val'))
+    }
 
 
 if __name__ == '__main__':
