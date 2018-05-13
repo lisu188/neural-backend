@@ -72,6 +72,7 @@ class Network:
                 print(self.log())
         self.steps = self.steps + steps
 
+    #TODO: what if seq len is 1?
     def sequence(self):
         packs = list(zip(self.input, self.output))
         shuffle(packs)
