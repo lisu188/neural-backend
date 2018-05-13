@@ -23,7 +23,6 @@ if __name__ == '__main__':
                         help="start rest server", action="store_true")
     parser.add_argument("--stats",
                         help="show database statistics", action="store_true")
-
     args = parser.parse_args()
 
     if args.train:

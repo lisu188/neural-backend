@@ -12,9 +12,11 @@ def load_all():
         patterns[dir]['test'] = []
         patterns[dir]['train'] = []
         for file in os.listdir(os.path.join(PATH, dir, 'test')):
-            patterns[dir]['test'].append(json.loads(open(os.path.join(PATH, dir, 'test', file)).read()))
+            patterns[dir]['test'].append(
+                {"file": file, "data": json.loads(open(os.path.join(PATH, dir, 'test', file)).read())})
         for file in os.listdir(os.path.join(PATH, dir, 'train')):
-            patterns[dir]['train'].append(json.loads(open(os.path.join(PATH, dir, 'train', file)).read()))
+            patterns[dir]['train'].append(
+                {"file": file, "data": json.loads(open(os.path.join(PATH, dir, 'train', file)).read())})
     return patterns
 
 

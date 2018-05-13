@@ -5,7 +5,7 @@ import tensorflow
 from flask import Flask, jsonify, request
 
 from data.conversion import convert_pattern
-from data.operations import average_pattern
+from data.operations import average_pattern, rms
 from data.pattern import load_all
 from engine.runner import build_network
 
@@ -100,6 +100,20 @@ class NeuralRestEngine:
             y = load_all()[name]
             xy_chart.add(name, list(map(lambda point: (point['X'], -point['Y']), y[type][id])))
             return xy_chart.render_response()
+
+        @app.route('/rmsd', methods=['GET'])
+        def rmsd():
+            all_rms = {}
+            for key, val in load_all().items():
+                all_patterns = val['test'] + val['train']
+                rms_values = rms(list(map(lambda x: convert_pattern(x['data']), all_patterns)))
+                map_file_to_rms = {}
+                for i in range(len(all_patterns)):
+                    map_file_to_rms[all_patterns[i]['file']] = {}
+                    for param in ['vx', 'vy', 'vf', 'vaz', 'val']:
+                        map_file_to_rms[all_patterns[i]['file']][param] = rms_values[param][i]
+                all_rms[key] = map_file_to_rms
+            return jsonify(all_rms)
 
         if 'PORT' in os.environ:
             port = int(os.environ['PORT'])

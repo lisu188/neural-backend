@@ -70,6 +70,10 @@ def average_array(arrays):
     return result
 
 
+def avg(*args):
+    return sum(args) / len(args)
+
+
 def arr_rms(array1, array2):
     return math.sqrt(sum(map(lambda val: math.pow(val[0] - val[1], 2), zip(array1, array2))))
 
