@@ -5,7 +5,7 @@ import tensorflow
 from flask import Flask, jsonify, request
 
 from data.conversion import convert_pattern
-from data.operations import average_pattern, rms
+from data.operations import average_pattern, rms, avg
 from data.pattern import load_all
 from engine.runner import build_network
 
@@ -112,7 +112,9 @@ class NeuralRestEngine:
                     map_file_to_rms[all_patterns[i]['file']] = {}
                     for param in ['vx', 'vy', 'vf', 'vaz', 'val']:
                         map_file_to_rms[all_patterns[i]['file']][param] = rms_values[param][i]
-                all_rms[key] = map_file_to_rms
+                    map_file_to_rms[all_patterns[i]['file']]['avg'] = avg(
+                        *map_file_to_rms[all_patterns[i]['file']].values())
+                all_rms[key] = sorted(list(map_file_to_rms.items()), key=lambda x: x[1]['avg'], reverse=True)
             return jsonify(all_rms)
 
         if 'PORT' in os.environ:
