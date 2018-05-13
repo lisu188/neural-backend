@@ -72,7 +72,6 @@ class Network:
                 print(self.log())
         self.steps = self.steps + steps
 
-    #TODO: what if seq len is 1?
     def sequence(self):
         packs = list(zip(self.input, self.output))
         shuffle(packs)
@@ -80,8 +79,9 @@ class Network:
         for i in range((pack_len // SEQUENCE_LENGTH) + 1):
             first_index = i * SEQUENCE_LENGTH
             last_index = pack_len if (i + 1) * SEQUENCE_LENGTH > pack_len else (i + 1) * SEQUENCE_LENGTH
-            yield {self.X: list(map(lambda x: x[0], packs[first_index:last_index])),
-                   self.Y: list(map(lambda x: x[1], packs[first_index:last_index]))}
+            if first_index != last_index:  # hack for seq_len = 1
+                yield {self.X: list(map(lambda x: x[0], packs[first_index:last_index])),
+                       self.Y: list(map(lambda x: x[1], packs[first_index:last_index]))}
 
     def log(self):
         loss, acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input,
