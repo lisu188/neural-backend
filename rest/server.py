@@ -71,7 +71,7 @@ class NeuralRestEngine:
             import pygal
             line_chart = pygal.Line(show_dots=False)
             y = load_all()[name]
-            for key, val in convert_pattern(y[type][id]).items():
+            for key, val in convert_pattern(y[type][id]['data']).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
 
@@ -80,7 +80,8 @@ class NeuralRestEngine:
             import pygal
             line_chart = pygal.Line(show_dots=False)
             y = load_all()[name]
-            for key, val in average_pattern(list(map(convert_pattern, y[type]))).items():
+            for key, val in average_pattern(
+                    list(map(convert_pattern, list(map(lambda x: x['data'], y[type]))))).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
 
@@ -89,7 +90,8 @@ class NeuralRestEngine:
             import pygal
             line_chart = pygal.Line(show_dots=False)
             y = load_all()[name]
-            for key, val in average_pattern(list(map(convert_pattern, y['train'] + y['test']))).items():
+            for key, val in average_pattern(
+                    list(map(convert_pattern, list(map(lambda x: x['data'], y['train'] + y['test']))))).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
 

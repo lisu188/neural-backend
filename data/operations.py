@@ -44,7 +44,7 @@ def quantize(dest_len, data):
 def normalize(data):
     local_min = min(data)
     local_max = max(data) - local_min
-    return list(map(lambda x: (x - 0.5) * 2, map(lambda x: x / local_max, map(lambda x: x - local_min, data))))
+    return list(map(lambda x: (x - 0.5), map(lambda x: x / local_max, map(lambda x: x - local_min, data))))
 
 
 def get_value_list(data, name):
