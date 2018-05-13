@@ -29,7 +29,9 @@ if __name__ == '__main__':
     if args.train:
         test_network(args.train)
     elif args.stats:
-        for val in load_all():
-            print(val[0], len(val[1]))
+        for key, val in load_all().items():
+            print(key, len(val['train']) + len(val['test']))
+            print('\t', 'train', len(val['train']))
+            print('\t', 'test', len(val['test']))
     elif args.server:
         NeuralRestEngine().run_server()

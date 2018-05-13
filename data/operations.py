@@ -70,6 +70,25 @@ def average_array(arrays):
     return result
 
 
+def arr_rms(array1, array2):
+    return math.sqrt(sum(map(lambda val: math.pow(val[0] - val[1], 2), zip(array1, array2))))
+
+
+def array_rms(arrays):
+    avg_arr = average_array(arrays)
+    return list(map(lambda val: arr_rms(val, avg_arr), arrays))
+
+
+def rms(patterns):
+    return {
+        "vx": array_rms(get_value_list(patterns, 'vx')),
+        "vy": array_rms(get_value_list(patterns, 'vy')),
+        "vf": array_rms(get_value_list(patterns, 'vf')),
+        "vaz": array_rms(get_value_list(patterns, 'vaz')),
+        "val": array_rms(get_value_list(patterns, 'val'))
+    }
+
+
 def average_pattern(patterns):
     return {
         "vx": average_array(get_value_list(patterns, 'vx')),
