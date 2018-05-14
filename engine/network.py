@@ -37,7 +37,7 @@ class Network:
 
         with tf.name_scope('main'):
             tf.summary.scalar('loss', self.loss_op)
-        tf.summary.scalar('accuracy', self.accuracy)
+            tf.summary.scalar('accuracy', self.accuracy)
 
         self.merged = tf.summary.merge_all()
 
