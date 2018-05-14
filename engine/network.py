@@ -4,7 +4,7 @@ from random import shuffle
 
 import tensorflow as tf
 
-from data.config import SEQUENCE_LENGTH
+from data.config import SEQUENCE_LENGTH, NUM_VECTORS
 from data.conversion import convert_pattern_flat
 
 
@@ -20,7 +20,7 @@ class Network:
         self.num_input = inputs
         self.num_classes = classes
 
-        self.X = tf.placeholder("float", [None, self.num_input])
+        self.X = tf.placeholder("float", [None] + self.num_input)
         self.Y = tf.placeholder("float", [None, self.num_classes])
 
         self.logits = self.build_net(inputs, *hidden,
@@ -37,7 +37,7 @@ class Network:
 
         with tf.name_scope('main'):
             tf.summary.scalar('loss', self.loss_op)
-            tf.summary.scalar('accuracy', self.accuracy)
+        tf.summary.scalar('accuracy', self.accuracy)
 
         self.merged = tf.summary.merge_all()
 
@@ -48,6 +48,7 @@ class Network:
         self.train_writer = tf.summary.FileWriter('./tensorboard/train',
                                                   self.session.graph)
         self.test_writer = tf.summary.FileWriter('./tensorboard/test',
+
                                                  self.session.graph)
 
         self.init = tf.global_variables_initializer()
@@ -111,7 +112,7 @@ class Network:
             tf.summary.scalar('min', tf.reduce_min(var))
             tf.summary.histogram('histogram', var)
 
-    def build_layer(self, name, input, output, previousLayer):
+    def build_flat_layer(self, name, input, output, previousLayer):
         with tf.name_scope(name):
             weights = tf.Variable(name='weight', initial_value=tf.random_normal([input, output]))
             biases = tf.Variable(name='bias', initial_value=tf.random_normal([output]))
@@ -122,6 +123,23 @@ class Network:
             self.variable_summaries(biases, 'biases')
             tf.summary.histogram('activation', layer)
             return layer
+
+    def build_inflated_layer(self, name, input, output, previousLayer):
+        with tf.name_scope(name):
+            layers = []
+            for i in range(input[0]):
+                layers.append(
+                    self.build_flat_layer("part%s" % i, input[1], output // 5, tf.gather(previousLayer, i, axis=1)))
+            return tf.concat(layers, 1)
+
+    def build_layer(self, name, input, output, previousLayer):
+        if hasattr(input, "__len__"):
+            if len(input) == 2:
+                return self.build_inflated_layer(name, input, output, previousLayer)
+            else:
+                raise Exception("Not supported length of input:", len(input))
+        else:
+            return self.build_flat_layer(name, input, output, previousLayer)
 
     def build_net(self, *struct):
         with tf.name_scope('layers'):

@@ -58,3 +58,9 @@ def convert_pattern_flat(raw_data):
     bean = convert_pattern(raw_data)
     for val in map(composed, (bean['vx'], bean['vy'], bean['vf'], bean['vaz'], bean['val'])):
         yield from val
+
+
+def convert_pattern_split(raw_data):
+    bean = convert_pattern(raw_data)
+    for val in map(composed, (bean['vx'], bean['vy'], bean['vf'], bean['vaz'], bean['val'])):
+        yield val
