@@ -94,7 +94,7 @@ class Network:
                 "test_acc": test_acc.item()}
 
     def use(self, pattern):
-        return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern_flat(pattern))]})
+        return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern_split(pattern))]})
 
     def add_train(self, input, output):
         self.input.append(input)
