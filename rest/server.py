@@ -41,8 +41,10 @@ class NeuralRestEngine:
         @app.route('/use', methods=["POST"])
         def use():
             answer = self.neural.use(request.get_json(force=True))[0]
-            max_index, max_value = max(enumerate(answer), key=operator.itemgetter(1))
-            return jsonify({"pattern": self.all_data[max_index][0], "confidence": max_value.item()})
+            ret = {}
+            for key, val in zip(list(self.all_data.keys()), answer):
+                ret[str(key)] = float(val)
+            return jsonify(ret)
 
         @app.route('/reload', methods=["POST"])
         def reload():
