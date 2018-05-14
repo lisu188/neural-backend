@@ -8,6 +8,7 @@ from data.conversion import convert_pattern
 from data.operations import average_pattern, rms, avg
 from data.pattern import load_all
 from engine.runner import build_network
+import pygal
 
 
 class NeuralRestEngine:
@@ -72,7 +73,7 @@ class NeuralRestEngine:
         def chart(name, type, id):
             import pygal
             line_chart = pygal.Line(show_dots=False)
-            y = load_all()[name]
+            y = self.all_data[name]
             for key, val in convert_pattern(y[type][id]['data']).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
@@ -81,7 +82,7 @@ class NeuralRestEngine:
         def avg_chart(name, type):
             import pygal
             line_chart = pygal.Line(show_dots=False)
-            y = load_all()[name]
+            y = self.all_data[name]
             for key, val in average_pattern(
                     list(map(convert_pattern, list(map(lambda x: x['data'], y[type]))))).items():
                 line_chart.add(key, list(val))
@@ -108,7 +109,7 @@ class NeuralRestEngine:
         @app.route('/rmsd', methods=['GET'])
         def rmsd():
             all_rms = {}
-            for key, val in load_all().items():
+            for key, val in self.all_data.items():
                 all_patterns = val['test'] + val['train']
                 rms_values = rms(list(map(lambda x: convert_pattern(x['data']), all_patterns)))
                 map_file_to_rms = {}
@@ -120,6 +121,17 @@ class NeuralRestEngine:
                         *map_file_to_rms[all_patterns[i]['file']].values())
                 all_rms[key] = sorted(list(map_file_to_rms.items()), key=lambda x: x[1]['avg'], reverse=True)
             return jsonify(all_rms)
+
+        @app.route('/weights', methods=['GET'])
+        def weights():
+            line_chart = pygal.Line(show_dots=False)
+            for layer in self.neural.get_weights()[0:1]:
+                for i in range(len(layer[0])):
+                    serie = []
+                    for index in range(len(layer)):
+                        serie.append(layer[index][i])
+                    line_chart.add(str(i), serie)
+            return line_chart.render_response()
 
         if 'PORT' in os.environ:
             port = int(os.environ['PORT'])

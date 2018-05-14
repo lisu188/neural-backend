@@ -4,18 +4,20 @@ from random import shuffle
 
 import tensorflow as tf
 
-from data.config import SEQUENCE_LENGTH, NUM_VECTORS
+from data.config import SEQUENCE_LENGTH, NUM_VECTORS, KEEP_PROB
 from data.conversion import convert_pattern_flat, convert_pattern_split
 
 
 class Network:
     def __init__(self, session, inputs, classes, hidden):
+        self.weights = []
         self.session = session
         self.output_test = []
         self.input_test = []
         self.output = []
         self.input = []
         self.steps = 0
+        self.keep_prob = tf.placeholder(tf.float32)
 
         self.num_input = inputs
         self.num_classes = classes
@@ -62,10 +64,12 @@ class Network:
                                  feed_dict=dict)
             train_summary = self.session.run(self.merged,
                                              feed_dict={self.X: self.input,
-                                                        self.Y: self.output})
+                                                        self.Y: self.output,
+                                                        self.keep_prob: 1})
             test_summary = self.session.run(self.merged,
                                             feed_dict={self.X: self.input_test,
-                                                       self.Y: self.output_test})
+                                                       self.Y: self.output_test,
+                                                       self.keep_prob: 1})
             self.train_writer.add_summary(train_summary, step)
             self.test_writer.add_summary(test_summary, step)
             if step % 1000 == 0:
@@ -82,19 +86,23 @@ class Network:
             last_index = pack_len if (i + 1) * SEQUENCE_LENGTH > pack_len else (i + 1) * SEQUENCE_LENGTH
             if first_index != last_index:  # hack for seq_len = 1
                 yield {self.X: list(map(lambda x: x[0], packs[first_index:last_index])),
-                       self.Y: list(map(lambda x: x[1], packs[first_index:last_index]))}
+                       self.Y: list(map(lambda x: x[1], packs[first_index:last_index])),
+                       self.keep_prob: KEEP_PROB}
 
     def log(self):
         loss, acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input,
-                                                                               self.Y: self.output})
+                                                                               self.Y: self.output,
+                                                                               self.keep_prob: 1})
 
         test_loss, test_acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input_test,
-                                                                                         self.Y: self.output_test})
+                                                                                         self.Y: self.output_test,
+                                                                                         self.keep_prob: 1})
         return {"step": self.steps, "loss": loss.item(), "acc": acc.item(), "test_loss": test_loss.item(),
                 "test_acc": test_acc.item()}
 
     def use(self, pattern):
-        return self.session.run(self.prediction, feed_dict={self.X: [list(convert_pattern_split(pattern))]})
+        return self.session.run(self.prediction,
+                                feed_dict={self.X: [list(convert_pattern_split(pattern))], self.keep_prob: 1})
 
     def add_train(self, input, output):
         self.input.append(input)
@@ -115,10 +123,12 @@ class Network:
     def build_flat_layer(self, name, input, output, previousLayer):
         with tf.name_scope(name):
             weights = tf.Variable(name='weight', initial_value=tf.random_normal([input, output]))
+            self.weights.append(weights)
             biases = tf.Variable(name='bias', initial_value=tf.random_normal([output]))
             layer = tf.nn.relu(
                 tf.add(tf.matmul(previousLayer, weights),
                        biases))
+            layer = tf.nn.dropout(layer, self.keep_prob)
             self.variable_summaries(weights, 'weights')
             self.variable_summaries(biases, 'biases')
             tf.summary.histogram('activation', layer)
@@ -131,6 +141,9 @@ class Network:
                 layers.append(
                     self.build_flat_layer("part%s" % i, input[1], output // 5, tf.gather(previousLayer, i, axis=1)))
             return tf.concat(layers, 1)
+
+    def get_weights(self):
+        return list(map(self.session.run, self.weights))
 
     def build_layer(self, name, input, output, previousLayer):
         if hasattr(input, "__len__"):
