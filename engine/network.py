@@ -9,7 +9,7 @@ from data.conversion import convert_pattern_flat
 
 
 class Network:
-    def __init__(self, session, inputs, classes):
+    def __init__(self, session, inputs, classes, hidden):
         self.session = session
         self.output_test = []
         self.input_test = []
@@ -23,7 +23,7 @@ class Network:
         self.X = tf.placeholder("float", [None, self.num_input])
         self.Y = tf.placeholder("float", [None, self.num_classes])
 
-        self.logits = self.build_net(inputs, 15,
+        self.logits = self.build_net(inputs, *hidden,
                                      classes)
         self.prediction = tf.nn.softmax(self.logits)
 

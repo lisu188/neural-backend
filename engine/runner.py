@@ -1,4 +1,4 @@
-from data.config import SIZE, NUM_VECTORS
+from data.config import SIZE, NUM_VECTORS, HIDDEN
 from data.conversion import convert_pattern_flat
 from data.pattern import load_all
 from engine.network import Network
@@ -13,7 +13,7 @@ def get_output(index, num_sets):
 def build_network(session):
     all_data = load_all()
     num_sets = len(all_data)
-    neural = Network(session, SIZE * NUM_VECTORS, num_sets)
+    neural = Network(session, SIZE * NUM_VECTORS, num_sets, HIDDEN)
 
     for current_set_name, pattern_set in all_data.items():
         current_set_id = list(all_data.keys()).index(current_set_name)
