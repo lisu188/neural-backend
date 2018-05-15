@@ -1,0 +1,706 @@
+[
+  {
+    "Timestamp": 1282.496,
+    "X": 233.5,
+    "Y": 231.5,
+    "Force": 0.5453125,
+    "AzimuthAngle": 0.5028489,
+    "AltitudeAngle": 0.8488267
+  },
+  {
+    "Timestamp": -17.185000000000002,
+    "X": 235.0,
+    "Y": 228.0,
+    "Force": 0.5757211,
+    "AzimuthAngle": 0.5028489,
+    "AltitudeAngle": 0.8488267
+  },
+  {
+    "Timestamp": -14.158000000000001,
+    "X": 236.5,
+    "Y": 227.0,
+    "Force": 0.640592933,
+    "AzimuthAngle": 0.5028489,
+    "AltitudeAngle": 0.8488267
+  },
+  {
+    "Timestamp": -5.207,
+    "X": 242.5,
+    "Y": 223.5,
+    "Force": 0.798457563,
+    "AzimuthAngle": 0.5028489,
+    "AltitudeAngle": 0.8488267
+  },
+  {
+    "Timestamp": -0.51,
+    "X": 249.0,
+    "Y": 220.0,
+    "Force": 0.8615404,
+    "AzimuthAngle": 0.5028489,
+    "AltitudeAngle": 0.8488267
+  },
+  {
+    "Timestamp": 8.305,
+    "X": 257.5,
+    "Y": 215.0,
+    "Force": 0.8867944,
+    "AzimuthAngle": 0.5028489,
+    "AltitudeAngle": 0.8488267
+  },
+  {
+    "Timestamp": 16.407,
+    "X": 268.5,
+    "Y": 208.0,
+    "Force": 0.894270837,
+    "AzimuthAngle": 0.5028489,
+    "AltitudeAngle": 0.8488267
+  },
+  {
+    "Timestamp": 24.526,
+    "X": 280.5,
+    "Y": 199.5,
+    "Force": 0.8904125,
+    "AzimuthAngle": 0.5028489,
+    "AltitudeAngle": 0.8488267
+  },
+  {
+    "Timestamp": 32.681000000000004,
+    "X": 295.0,
+    "Y": 189.5,
+    "Force": 0.876357,
+    "AzimuthAngle": 0.5075181,
+    "AltitudeAngle": 0.849788
+  },
+  {
+    "Timestamp": 40.494,
+    "X": 309.0,
+    "Y": 178.5,
+    "Force": 0.86114186,
+    "AzimuthAngle": 0.531794846,
+    "AltitudeAngle": 0.853206
+  },
+  {
+    "Timestamp": 48.413000000000004,
+    "X": 323.0,
+    "Y": 167.5,
+    "Force": 0.8599359,
+    "AzimuthAngle": 0.557521164,
+    "AltitudeAngle": 0.856883347
+  },
+  {
+    "Timestamp": 56.801,
+    "X": 338.0,
+    "Y": 155.0,
+    "Force": 0.8636883,
+    "AzimuthAngle": 0.586665452,
+    "AltitudeAngle": 0.8608354
+  },
+  {
+    "Timestamp": 65.308,
+    "X": 352.0,
+    "Y": 142.5,
+    "Force": 0.8640625,
+    "AzimuthAngle": 0.6109269,
+    "AltitudeAngle": 0.8647569
+  },
+  {
+    "Timestamp": 73.434,
+    "X": 364.5,
+    "Y": 131.0,
+    "Force": 0.853645861,
+    "AzimuthAngle": 0.6361497,
+    "AltitudeAngle": 0.8679612
+  },
+  {
+    "Timestamp": 81.717,
+    "X": 377.0,
+    "Y": 118.5,
+    "Force": 0.814080834,
+    "AzimuthAngle": 0.6598008,
+    "AltitudeAngle": 0.8709367
+  },
+  {
+    "Timestamp": 90.054,
+    "X": 387.0,
+    "Y": 107.5,
+    "Force": 0.764965832,
+    "AzimuthAngle": 0.68534404,
+    "AltitudeAngle": 0.8728593
+  },
+  {
+    "Timestamp": 98.436,
+    "X": 395.5,
+    "Y": 97.0,
+    "Force": 0.7347216,
+    "AzimuthAngle": 0.706477463,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 107.423,
+    "X": 402.0,
+    "Y": 87.0,
+    "Force": 0.7152564,
+    "AzimuthAngle": 0.7300523,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 115.67,
+    "X": 406.5,
+    "Y": 78.0,
+    "Force": 0.6908333,
+    "AzimuthAngle": 0.750132859,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 123.94900000000001,
+    "X": 409.0,
+    "Y": 70.0,
+    "Force": 0.6854762,
+    "AzimuthAngle": 0.768184,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 131.469,
+    "X": 409.5,
+    "Y": 62.5,
+    "Force": 0.6660751,
+    "AzimuthAngle": 0.781627,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 140.52,
+    "X": 408.0,
+    "Y": 57.0,
+    "Force": 0.6246199,
+    "AzimuthAngle": 0.790980637,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 147.89600000000002,
+    "X": 403.5,
+    "Y": 53.0,
+    "Force": 0.5897035,
+    "AzimuthAngle": 0.797236741,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 157.41,
+    "X": 397.0,
+    "Y": 51.5,
+    "Force": 0.584895849,
+    "AzimuthAngle": 0.798823655,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 164.347,
+    "X": 392.0,
+    "Y": 51.5,
+    "Force": 0.584895849,
+    "AzimuthAngle": 0.798823655,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 173.127,
+    "X": 376.5,
+    "Y": 57.5,
+    "Force": 0.559971869,
+    "AzimuthAngle": 0.798823655,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 181.472,
+    "X": 363.0,
+    "Y": 64.5,
+    "Force": 0.5259534,
+    "AzimuthAngle": 0.798823655,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 189.812,
+    "X": 348.5,
+    "Y": 74.5,
+    "Force": 0.4931029,
+    "AzimuthAngle": 0.798823655,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 198.417,
+    "X": 335.0,
+    "Y": 85.0,
+    "Force": 0.488108963,
+    "AzimuthAngle": 0.798823655,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 206.495,
+    "X": 320.0,
+    "Y": 98.0,
+    "Force": 0.5290259,
+    "AzimuthAngle": 0.798823655,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 214.851,
+    "X": 306.5,
+    "Y": 111.0,
+    "Force": 0.6143322,
+    "AzimuthAngle": 0.798823655,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 223.15400000000002,
+    "X": 295.5,
+    "Y": 123.5,
+    "Force": 0.7327821,
+    "AzimuthAngle": 0.7844346,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 231.45000000000002,
+    "X": 285.0,
+    "Y": 137.5,
+    "Force": 0.8224125,
+    "AzimuthAngle": 0.760173142,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 239.15200000000002,
+    "X": 281.0,
+    "Y": 143.5,
+    "Force": 0.860686362,
+    "AzimuthAngle": 0.7498277,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 248.13600000000002,
+    "X": 270.5,
+    "Y": 164.0,
+    "Force": 0.927867532,
+    "AzimuthAngle": 0.725184739,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 256.47200000000004,
+    "X": 266.0,
+    "Y": 178.0,
+    "Force": 0.92586875,
+    "AzimuthAngle": 0.705775559,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 264.813,
+    "X": 264.0,
+    "Y": 189.5,
+    "Force": 0.8929006,
+    "AzimuthAngle": 0.684459031,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 273.12,
+    "X": 264.0,
+    "Y": 198.5,
+    "Force": 0.8396619,
+    "AzimuthAngle": 0.6692613,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 281.615,
+    "X": 267.0,
+    "Y": 205.0,
+    "Force": 0.8094838,
+    "AzimuthAngle": 0.657420456,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 289.75600000000003,
+    "X": 272.5,
+    "Y": 209.0,
+    "Force": 0.7988004,
+    "AzimuthAngle": 0.650309861,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 298.144,
+    "X": 279.5,
+    "Y": 210.0,
+    "Force": 0.793229163,
+    "AzimuthAngle": 0.6466935,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 306.45300000000003,
+    "X": 288.0,
+    "Y": 209.0,
+    "Force": 0.7929848,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 314.743,
+    "X": 293.0,
+    "Y": 207.5,
+    "Force": 0.7927284,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 323.365,
+    "X": 307.5,
+    "Y": 199.5,
+    "Force": 0.7663469,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 331.435,
+    "X": 318.0,
+    "Y": 192.0,
+    "Force": 0.7597994,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 339.833,
+    "X": 327.0,
+    "Y": 184.5,
+    "Force": 0.7751147,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.873256
+  },
+  {
+    "Timestamp": 348.12,
+    "X": 335.5,
+    "Y": 177.5,
+    "Force": 0.792708337,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8750718
+  },
+  {
+    "Timestamp": 356.454,
+    "X": 342.5,
+    "Y": 171.5,
+    "Force": 0.792708337,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.876872361
+  },
+  {
+    "Timestamp": 365.331,
+    "X": 347.5,
+    "Y": 168.0,
+    "Force": 0.7877009,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8778947
+  },
+  {
+    "Timestamp": 373.106,
+    "X": 351.5,
+    "Y": 165.5,
+    "Force": 0.758689642,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.878321946
+  },
+  {
+    "Timestamp": 381.48400000000004,
+    "X": 353.5,
+    "Y": 165.0,
+    "Force": 0.7310824,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8785966
+  },
+  {
+    "Timestamp": 389.208,
+    "X": 354.5,
+    "Y": 165.0,
+    "Force": 0.725441337,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.878688157
+  },
+  {
+    "Timestamp": 398.141,
+    "X": 354.5,
+    "Y": 167.5,
+    "Force": 0.707686245,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8790849
+  },
+  {
+    "Timestamp": 406.69,
+    "X": 352.0,
+    "Y": 171.5,
+    "Force": 0.6776295,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8791459
+  },
+  {
+    "Timestamp": 414.797,
+    "X": 349.0,
+    "Y": 176.5,
+    "Force": 0.666577935,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8791459
+  },
+  {
+    "Timestamp": 423.195,
+    "X": 346.0,
+    "Y": 181.0,
+    "Force": 0.666145861,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8791459
+  },
+  {
+    "Timestamp": 431.416,
+    "X": 343.5,
+    "Y": 185.5,
+    "Force": 0.675435364,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8791459
+  },
+  {
+    "Timestamp": 439.781,
+    "X": 341.5,
+    "Y": 188.5,
+    "Force": 0.69560343,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8801835
+  },
+  {
+    "Timestamp": 448.38100000000003,
+    "X": 341.0,
+    "Y": 190.5,
+    "Force": 0.7119144,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8812974
+  },
+  {
+    "Timestamp": 456.473,
+    "X": 341.0,
+    "Y": 191.5,
+    "Force": 0.7321368,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.88242656
+  },
+  {
+    "Timestamp": 464.86400000000003,
+    "X": 342.5,
+    "Y": 192.0,
+    "Force": 0.745673,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.883509934
+  },
+  {
+    "Timestamp": 473.124,
+    "X": 344.5,
+    "Y": 192.0,
+    "Force": 0.7484375,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8843797
+  },
+  {
+    "Timestamp": 481.45700000000005,
+    "X": 349.0,
+    "Y": 190.5,
+    "Force": 0.7484375,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.884913743
+  },
+  {
+    "Timestamp": 490.005,
+    "X": 354.0,
+    "Y": 188.0,
+    "Force": 0.731269836,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8857377
+  },
+  {
+    "Timestamp": 498.184,
+    "X": 359.0,
+    "Y": 185.0,
+    "Force": 0.6953045,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8870347
+  },
+  {
+    "Timestamp": 506.54200000000003,
+    "X": 364.5,
+    "Y": 182.0,
+    "Force": 0.679792047,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.888652146
+  },
+  {
+    "Timestamp": 514.76100000000008,
+    "X": 369.5,
+    "Y": 180.0,
+    "Force": 0.6667437,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8899339
+  },
+  {
+    "Timestamp": 523.08400000000006,
+    "X": 373.5,
+    "Y": 178.5,
+    "Force": 0.665692747,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.890910447
+  },
+  {
+    "Timestamp": 531.663,
+    "X": 376.5,
+    "Y": 177.5,
+    "Force": 0.68614924,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.891978562
+  },
+  {
+    "Timestamp": 539.92000000000007,
+    "X": 379.0,
+    "Y": 177.5,
+    "Force": 0.701746762,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.89313823
+  },
+  {
+    "Timestamp": 548.12700000000007,
+    "X": 381.0,
+    "Y": 178.0,
+    "Force": 0.707291543,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.894496262
+  },
+  {
+    "Timestamp": 556.485,
+    "X": 382.5,
+    "Y": 179.0,
+    "Force": 0.7078125,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.896022141
+  },
+  {
+    "Timestamp": 564.823,
+    "X": 384.0,
+    "Y": 180.5,
+    "Force": 0.681296766,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.8977769
+  },
+  {
+    "Timestamp": 573.49,
+    "X": 385.5,
+    "Y": 182.0,
+    "Force": 0.620384455,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.899669
+  },
+  {
+    "Timestamp": 581.575,
+    "X": 387.0,
+    "Y": 183.0,
+    "Force": 0.571685553,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.901652634
+  },
+  {
+    "Timestamp": 589.77,
+    "X": 390.0,
+    "Y": 183.0,
+    "Force": 0.559930563,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.9031785
+  },
+  {
+    "Timestamp": 598.116,
+    "X": 393.5,
+    "Y": 182.0,
+    "Force": 0.581442237,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.9042161
+  },
+  {
+    "Timestamp": 606.46300000000008,
+    "X": 398.0,
+    "Y": 180.0,
+    "Force": 0.6566817,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.904826462
+  },
+  {
+    "Timestamp": 615.00200000000007,
+    "X": 402.0,
+    "Y": 177.0,
+    "Force": 0.745843649,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.905207932
+  },
+  {
+    "Timestamp": 623.169,
+    "X": 406.0,
+    "Y": 175.0,
+    "Force": 0.809995651,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.9056657
+  },
+  {
+    "Timestamp": 631.476,
+    "X": 409.0,
+    "Y": 173.5,
+    "Force": 0.834367,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.9061387
+  },
+  {
+    "Timestamp": 639.792,
+    "X": 411.5,
+    "Y": 173.0,
+    "Force": 0.838020861,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.906535447
+  },
+  {
+    "Timestamp": 648.15,
+    "X": 413.5,
+    "Y": 172.5,
+    "Force": 0.7805289,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.9067643
+  },
+  {
+    "Timestamp": 656.668,
+    "X": 415.0,
+    "Y": 172.5,
+    "Force": 0.6309855,
+    "AzimuthAngle": 0.644496262,
+    "AltitudeAngle": 0.907039
+  },
+  {
+    "Timestamp": 664.78600000000006,
+    "X": 415.5,
+    "Y": 172.5,
+    "Force": 0.4455208,
+    "AzimuthAngle": 0.645198166,
+    "AltitudeAngle": 0.907527268
+  },
+  {
+    "Timestamp": 685.751,
+    "X": 412.0,
+    "Y": 177.5,
+    "Force": 0.0,
+    "AzimuthAngle": 0.6489213,
+    "AltitudeAngle": 0.9102586
+  },
+  {
+    "Timestamp": 673.128,
+    "X": 415.5,
+    "Y": 174.0,
+    "Force": 0.187884524,
+    "AzimuthAngle": 0.6477464,
+    "AltitudeAngle": 0.908274949
+  },
+  {
+    "Timestamp": 681.437,
+    "X": 414.5,
+    "Y": 175.5,
+    "Force": 0.02331861,
+    "AzimuthAngle": 0.6489213,
+    "AltitudeAngle": 0.9094804
+  }
+]
