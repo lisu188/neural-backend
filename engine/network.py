@@ -59,6 +59,9 @@ class Network:
 
     def train(self, steps):
         for step in range(0, steps):
+            if self.steps % 1000 == 0:
+                print("Training step: " + str(self.steps))
+                print(self.log())
             for dict in self.sequence():
                 self.session.run(self.train_op,
                                  feed_dict=dict)
@@ -72,10 +75,7 @@ class Network:
                                                        self.keep_prob: 1})
             self.train_writer.add_summary(train_summary, step)
             self.test_writer.add_summary(test_summary, step)
-            if step % 1000 == 0:
-                print("Training step: " + str(step))
-                print(self.log())
-        self.steps = self.steps + steps
+            self.steps = self.steps + 1
 
     def sequence(self):
         packs = list(zip(self.input, self.output))

@@ -1,5 +1,6 @@
 import operator
 import os
+from threading import RLock, Thread
 
 import tensorflow
 from flask import Flask, jsonify, request
@@ -11,12 +12,24 @@ from engine.runner import build_network
 import pygal
 
 
+def locking(lock):
+    def _locking(f):
+        def locked_f(*args, **kwargs):
+            with lock:
+                return f(*args, **kwargs)
+
+        return locked_f
+
+    return _locking
+
+
 class NeuralRestEngine:
     def __init__(self):
         self.session = None
         self.all_data = None
         self.num_sets = None
         self.neural = None
+        self.lock = RLock()
         self.reload()
 
     def reload(self):
@@ -30,16 +43,22 @@ class NeuralRestEngine:
 
     def train(self, steps):
         self.neural.train(steps)
-        return self.neural.log()
 
     def run_server(self):
         app = Flask("neural")
 
-        @app.route('/train/<int:steps>', methods=["POST"])
+        @app.route('/train/<int:steps>', methods=["POST"], endpoint="train")
         def train(steps):
-            return jsonify(self.train(steps))
+            def train_op():
+                for i in range(steps):
+                    with self.lock:
+                        self.train(1)
 
-        @app.route('/use', methods=["POST"])
+            Thread(target=train_op).start()
+            return '', 204
+
+        @app.route('/use', methods=["POST"], endpoint="use")
+        @locking(lock=self.lock)
         def use():
             answer = self.neural.use(request.get_json(force=True))[0]
             ret = {}
@@ -47,7 +66,13 @@ class NeuralRestEngine:
                 ret[str(key)] = float(val)
             return jsonify(ret)
 
-        @app.route('/reload', methods=["POST"])
+        @app.route('/log', methods=["GET"], endpoint="log")
+        @locking(lock=self.lock)
+        def log():
+            return jsonify(self.neural.log())
+
+        @app.route('/reload', methods=["POST"], endpoint="reload")
+        @locking(lock=self.lock)
         def reload():
             return jsonify(self.reload())
 
@@ -122,6 +147,7 @@ class NeuralRestEngine:
                 all_rms[key] = sorted(list(map_file_to_rms.items()), key=lambda x: x[1]['avg'], reverse=True)
             return jsonify(all_rms)
 
+        @locking(lock=self.lock)
         @app.route('/weights', methods=['GET'])
         def weights():
             line_chart = pygal.Line(show_dots=False)
