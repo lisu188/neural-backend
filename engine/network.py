@@ -1,11 +1,11 @@
 import os
-import shutil
 import time
+from random import shuffle
 
 import tensorflow as tf
 
-from data.config import SEQUENCE_LENGTH, VECTOR_COUNT, KEEP_PROB
-from data.conversion import convert_pattern_flat, convert_pattern_split
+from data.config import SEQUENCE_LENGTH, KEEP_PROB
+from data.conversion import convert_pattern_split
 
 
 class Network:
