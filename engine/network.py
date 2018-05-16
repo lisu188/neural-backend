@@ -1,6 +1,7 @@
 import os
 import shutil
 from random import shuffle
+from time import strftime
 
 import tensorflow as tf
 
@@ -38,20 +39,23 @@ class Network:
         self.accuracy = tf.reduce_mean(tf.cast(self.correct_pred, tf.float32))
 
         with tf.name_scope('main'):
-            tf.summary.scalar('loss', self.loss_op)
-            tf.summary.scalar('accuracy', self.accuracy)
+            with tf.name_scope('train'):
+                tf.summary.scalar('loss', self.loss_op)
+                tf.summary.scalar('accuracy', self.accuracy)
 
-        self.merged = tf.summary.merge_all()
+            with tf.name_scope('test'):
+                tf.summary.scalar('loss', self.loss_op)
+                tf.summary.scalar('accuracy', self.accuracy)
+
+        self.merged_train = tf.summary.merge_all(scope='main/train')
+        self.merged_test = tf.summary.merge_all(scope='main/test')
+        self.merged_layers = tf.summary.merge_all(scope='layers')
 
         if not os.path.exists("./tensorboard"):
             os.makedirs("./tensorboard")
-        shutil.rmtree("./tensorboard")
 
-        self.train_writer = tf.summary.FileWriter('./tensorboard/train',
-                                                  self.session.graph)
-        self.test_writer = tf.summary.FileWriter('./tensorboard/test',
-
-                                                 self.session.graph)
+        self.writer = tf.summary.FileWriter(os.path.join('./tensorboard', strftime("%Y%m%d-%H%M%S")),
+                                            self.session.graph)
 
         self.init = tf.global_variables_initializer()
 
@@ -60,22 +64,26 @@ class Network:
     def train(self, steps):
         for step in range(0, steps):
             if self.steps % 1000 == 0:
-                print("Training step: " + str(self.steps))
                 print(self.log())
-            for dict in self.sequence():
-                self.session.run(self.train_op,
-                                 feed_dict=dict)
             if self.steps % 100 == 0:
-                train_summary = self.session.run(self.merged,
+                train_summary = self.session.run(self.merged_train,
                                                  feed_dict={self.X: self.input,
                                                             self.Y: self.output,
                                                             self.keep_prob: 1})
-                test_summary = self.session.run(self.merged,
+                test_summary = self.session.run(self.merged_test,
                                                 feed_dict={self.X: self.input_test,
                                                            self.Y: self.output_test,
                                                            self.keep_prob: 1})
-                self.train_writer.add_summary(train_summary, step)
-                self.test_writer.add_summary(test_summary, step)
+                layers_summary = self.session.run(self.merged_layers,
+                                                  feed_dict={self.X: self.input_test,
+                                                             self.Y: self.output_test,
+                                                             self.keep_prob: 1})
+                self.writer.add_summary(train_summary, self.steps)
+                self.writer.add_summary(test_summary, self.steps)
+                self.writer.add_summary(layers_summary, self.steps)
+            for sequenced in self.sequence():
+                self.session.run(self.train_op,
+                                 feed_dict=sequenced)
             self.steps = self.steps + 1
 
     def sequence(self):
