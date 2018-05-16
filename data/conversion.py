@@ -25,7 +25,7 @@ def compose(a, b):
     return _composed
 
 
-quntizer_op = partial(quantize, config.SIZE)
+quntizer_op = partial(quantize, config.VECTOR_SIZE)
 composed = compose(normalize, quntizer_op)
 
 
