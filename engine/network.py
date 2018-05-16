@@ -1,7 +1,6 @@
 import os
 import shutil
-from random import shuffle
-from time import strftime
+import time
 
 import tensorflow as tf
 
@@ -54,7 +53,7 @@ class Network:
         if not os.path.exists("./tensorboard"):
             os.makedirs("./tensorboard")
 
-        self.writer = tf.summary.FileWriter(os.path.join('./tensorboard', strftime("%Y%m%d-%H%M%S")),
+        self.writer = tf.summary.FileWriter(os.path.join('./tensorboard', str(round(time.time() * 1000))),
                                             self.session.graph, filename_suffix=".dat")
 
         self.init = tf.global_variables_initializer()
