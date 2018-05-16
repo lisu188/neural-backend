@@ -54,7 +54,7 @@ class Network:
         if not os.path.exists("./tensorboard"):
             os.makedirs("./tensorboard")
 
-        self.writer = tf.summary.FileWriter(os.path.join('./tensorboard'),
+        self.writer = tf.summary.FileWriter(os.path.join('./tensorboard', strftime("%Y%m%d-%H%M%S")),
                                             self.session.graph, filename_suffix=".dat")
 
         self.init = tf.global_variables_initializer()
