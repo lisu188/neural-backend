@@ -65,16 +65,17 @@ class Network:
             for dict in self.sequence():
                 self.session.run(self.train_op,
                                  feed_dict=dict)
-            train_summary = self.session.run(self.merged,
-                                             feed_dict={self.X: self.input,
-                                                        self.Y: self.output,
-                                                        self.keep_prob: 1})
-            test_summary = self.session.run(self.merged,
-                                            feed_dict={self.X: self.input_test,
-                                                       self.Y: self.output_test,
-                                                       self.keep_prob: 1})
-            self.train_writer.add_summary(train_summary, step)
-            self.test_writer.add_summary(test_summary, step)
+            if self.steps % 100 == 0:
+                train_summary = self.session.run(self.merged,
+                                                 feed_dict={self.X: self.input,
+                                                            self.Y: self.output,
+                                                            self.keep_prob: 1})
+                test_summary = self.session.run(self.merged,
+                                                feed_dict={self.X: self.input_test,
+                                                           self.Y: self.output_test,
+                                                           self.keep_prob: 1})
+                self.train_writer.add_summary(train_summary, step)
+                self.test_writer.add_summary(test_summary, step)
             self.steps = self.steps + 1
 
     def sequence(self):
