@@ -9,7 +9,7 @@ import requests
 class Board:
     def __init__(self, callback=lambda x: None):
         self.root = tk.Tk()
-        self.canvas = tk.Canvas(self.root, width=2000, height=1000)
+        self.canvas = tk.Canvas(self.root, width=800, height=600)
         self.canvas.pack()
         self.all_coords = []
         self.in_progress = False
