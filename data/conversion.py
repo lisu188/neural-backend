@@ -1,7 +1,7 @@
 from functools import partial
 
 from data import config
-from data.operations import differentiate, normalize, quantize
+from data.operations import differentiate_smooth, normalize, quantize
 
 
 def get_element(data, index):
@@ -39,11 +39,11 @@ def convert_pattern(raw_data):
     az = get_value_list(sorted_data, 'AzimuthAngle')
     al = get_value_list(sorted_data, 'AltitudeAngle')
 
-    vx = differentiate(x, t)
-    vy = differentiate(y, t)
-    vf = differentiate(f, t)
-    vaz = differentiate(az, t)
-    val = differentiate(al, t)
+    vx = differentiate_smooth(x, t)
+    vy = differentiate_smooth(y, t)
+    vf = differentiate_smooth(f, t)
+    vaz = differentiate_smooth(az, t)
+    val = differentiate_smooth(al, t)
 
     return {
         "vx": composed(vx),

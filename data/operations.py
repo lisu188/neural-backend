@@ -60,12 +60,16 @@ def get_value_list(data, name):
     return ret
 
 
-def differentiate(dx, dt):
-    assert (len(dx) == len(dt))
+def differentiate_smooth(x, t):
+    return savitzky_golay(differentiate(x, t), 51, 3)
+
+
+def differentiate(x, t):
+    assert (len(x) == len(t))
     result = []
-    for i in range(len(dx) - 1):
-        result.append((dx[i + 1] - dx[i]) / (dt[i + 1] - dt[i]))
-    return savitzky_golay(result, 51, 3)
+    for i in range(len(x) - 1):
+        result.append((x[i + 1] - x[i]) / (t[i + 1] - t[i]))
+    return result
 
 
 def average_array(arrays):
@@ -112,4 +116,4 @@ def average_pattern(patterns):
 if __name__ == '__main__':
     print(quantize([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 100))
     print(normalize([10, 20, 30, 40, 50]))
-    print(differentiate([2, 4, 6, 8, 10], [1, 2, 3, 4, 5]))
+    print(differentiate_smooth([2, 4, 6, 8, 10], [1, 2, 3, 4, 5]))
