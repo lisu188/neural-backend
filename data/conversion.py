@@ -1,5 +1,5 @@
 from data import config
-from data.operations import quantize_base, normalize, differentiate
+from data.operations import quantize_base, normalize, differentiate, smooth
 
 
 def get_element(data, index):
@@ -47,6 +47,12 @@ def convert_pattern(raw_data):
     f = normalize(f)
     az = normalize(az)
     al = normalize(al)
+
+    vx = smooth(vx)
+    vy = smooth(vy)
+    f = smooth(f)
+    az = smooth(az)
+    al = smooth(al)
 
     return {
         "vx": vx,
