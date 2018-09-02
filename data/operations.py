@@ -1,6 +1,6 @@
 import math
 
-from data.config import WINDOW_SIZE, ORDER
+from data.config import WINDOW_SIZE, ORDER, SMOOTH
 
 
 def savitzky_golay(y, window_size, order, deriv=0, rate=1):
@@ -93,7 +93,9 @@ def get_value_list(data, name):
 
 
 def smooth(data):
-    return savitzky_golay(data, WINDOW_SIZE, ORDER)
+    if SMOOTH:
+        return savitzky_golay(data, WINDOW_SIZE, ORDER)
+    return data
 
 
 def differentiate(x, t):
