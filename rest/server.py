@@ -127,7 +127,7 @@ class NeuralRestEngine:
             import pygal
             xy_chart = pygal.XY(stroke=False)
             y = load_all()[name]
-            xy_chart.add(name, list(map(lambda point: (point['X'], -point['Y']), y[type][id])))
+            xy_chart.add(name, list(map(lambda point: (point['X'], -point['Y']), y[type][id]['data'])))
             return xy_chart.render_response()
 
         @app.route('/rmsd', methods=['GET'])
