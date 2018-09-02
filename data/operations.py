@@ -58,16 +58,19 @@ def quantize_base(dest_len, data, base):
         if new_base[new_index] == base[current_index]:
             new_data.append(data[current_index])
         else:
-            base_diff = base[current_index + 1] - base[current_index]
-
-            data_diff = data[current_index + 1] - data[current_index]
-
-            new_base_diff = new_base[new_index] - base[current_index]
-
-            ratio = new_base_diff / base_diff
-
-            new_data.append(data[current_index] + data_diff * ratio)
+            while new_base[new_index] > base[current_index + 1]:
+                current_index += 1
+            new_data.append(get_next_value(base, current_index, data, new_base, new_index))
     return new_data
+
+
+def get_next_value(base, current_index, data, new_base, new_index):
+    base_diff = base[current_index + 1] - base[current_index]
+    data_diff = data[current_index + 1] - data[current_index]
+    new_base_diff = new_base[new_index] - base[current_index]
+    ratio = new_base_diff / base_diff
+    new_value = data[current_index] + data_diff * ratio
+    return new_value
 
 
 def normalize(data, shift=-0.5):
@@ -152,3 +155,5 @@ if __name__ == '__main__':
     print(normalize([10, 20, 30, 40, 50]))
     print(differentiate([2, 4, 6, 8, 10], [1, 2, 3, 4, 5]))
     print(quantize_base(10, [1, 3, 5], [0, 1, 100]))
+    print(quantize_base(3, [1, 3, 5, 7, 9], [0, 1, 10, 100, 1000]))
+    print(quantize_base(4, [1, 3, 5, 7, 9, 1500, 30], [0, 1, 10, 100, 1000, 10001, 10002]))
