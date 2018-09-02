@@ -72,6 +72,9 @@ def normalize(data, shift=-0.5):
     local_min = min(data)
     local_max = max(data) - local_min
 
+    if min(data) == max(data):
+        return [0.5 + shift] * len(data)
+
     def div_max(x):
         if local_max == 0:
             return 0
