@@ -88,7 +88,7 @@ def get_value_list(data, name):
 
 
 def smooth(data):
-    return savitzky_golay(data, 13, 3)
+    return savitzky_golay(data, 51, 3)
 
 
 def differentiate(x, t):

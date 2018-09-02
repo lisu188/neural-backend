@@ -42,17 +42,17 @@ def convert_pattern(raw_data):
     az = quantize_base(config.VECTOR_SIZE, az, t)
     al = quantize_base(config.VECTOR_SIZE, al, t)
 
-    vx = normalize(vx)
-    vy = normalize(vy)
-    f = normalize(f)
-    az = normalize(az)
-    al = normalize(al)
-
     vx = smooth(vx)
     vy = smooth(vy)
     f = smooth(f)
     az = smooth(az)
     al = smooth(al)
+
+    vx = normalize(vx)
+    vy = normalize(vy)
+    f = normalize(f)
+    az = normalize(az)
+    al = normalize(al)
 
     return {
         "vx": vx,
