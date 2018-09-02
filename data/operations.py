@@ -99,9 +99,9 @@ def rms(patterns):
     return {
         "vx": array_rms(get_value_list(patterns, 'vx')),
         "vy": array_rms(get_value_list(patterns, 'vy')),
-        "vf": array_rms(get_value_list(patterns, 'vf')),
-        "vaz": array_rms(get_value_list(patterns, 'vaz')),
-        "val": array_rms(get_value_list(patterns, 'val'))
+        "f": array_rms(get_value_list(patterns, 'f')),
+        "az": array_rms(get_value_list(patterns, 'az')),
+        "al": array_rms(get_value_list(patterns, 'al'))
     }
 
 
@@ -109,14 +109,14 @@ def average_pattern(patterns):
     return {
         "vx": average_array(get_value_list(patterns, 'vx')),
         "vy": average_array(get_value_list(patterns, 'vy')),
-        "vf": average_array(get_value_list(patterns, 'vf')),
-        "vaz": average_array(get_value_list(patterns, 'vaz')),
-        "val": average_array(get_value_list(patterns, 'val'))
+        "f": average_array(get_value_list(patterns, 'f')),
+        "az": average_array(get_value_list(patterns, 'az')),
+        "al": average_array(get_value_list(patterns, 'al'))
     }
 
 
 if __name__ == '__main__':
     print(quantize(100, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
     print(normalize([10, 20, 30, 40, 50]))
-    print(differentiate_smooth([2, 4, 6, 8, 10], [1, 2, 3, 4, 5]))
+    print(differentiate([2, 4, 6, 8, 10], [1, 2, 3, 4, 5]))
     print(quantize_base(10, [1, 3, 5], [0, 1, 100]))
