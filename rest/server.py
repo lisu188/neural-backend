@@ -1,7 +1,7 @@
-import operator
 import os
 from threading import RLock, Thread
 
+import pygal
 import tensorflow
 from flask import Flask, jsonify, request
 
@@ -9,7 +9,6 @@ from data.conversion import convert_pattern
 from data.operations import average_pattern, rms, avg
 from data.pattern import load_all
 from engine.runner import build_network
-import pygal
 
 
 def locking(lock):
@@ -140,7 +139,7 @@ class NeuralRestEngine:
                 map_file_to_rms = {}
                 for i in range(len(all_patterns)):
                     map_file_to_rms[all_patterns[i]['file']] = {}
-                    for param in ['vx', 'vy', 'vf', 'vaz', 'val']:
+                    for param in ['vx', 'vy', 'f', 'az', 'al']:
                         map_file_to_rms[all_patterns[i]['file']][param] = rms_values[param][i]
                     map_file_to_rms[all_patterns[i]['file']]['avg'] = avg(
                         *map_file_to_rms[all_patterns[i]['file']].values())

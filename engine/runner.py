@@ -1,5 +1,5 @@
 from data.config import VECTOR_SIZE, VECTOR_COUNT, HIDDEN
-from data.conversion import convert_pattern_flat, convert_pattern_split
+from data.conversion import convert_pattern_split
 from data.pattern import load_all
 from engine.network import Network
 

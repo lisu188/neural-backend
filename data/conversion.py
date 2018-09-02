@@ -1,7 +1,5 @@
-from functools import partial
-
 from data import config
-from data.operations import differentiate_smooth, normalize, quantize
+from data.operations import quantize_base, normalize, differentiate
 
 
 def get_element(data, index):
@@ -25,10 +23,6 @@ def compose(a, b):
     return _composed
 
 
-quntizer_op = partial(quantize, config.VECTOR_SIZE)
-composed = compose(normalize, quntizer_op)
-
-
 def convert_pattern(raw_data):
     sorted_data = sorted(raw_data, key=lambda ob: ob['Timestamp'])
 
@@ -39,28 +33,31 @@ def convert_pattern(raw_data):
     az = get_value_list(sorted_data, 'AzimuthAngle')
     al = get_value_list(sorted_data, 'AltitudeAngle')
 
-    vx = differentiate_smooth(x, t)
-    vy = differentiate_smooth(y, t)
-    vf = differentiate_smooth(f, t)
-    vaz = differentiate_smooth(az, t)
-    val = differentiate_smooth(al, t)
+    vx = differentiate(x, t)
+    vy = differentiate(y, t)
+
+    vx = quantize_base(config.VECTOR_SIZE, vx, t[0:-1])
+    vy = quantize_base(config.VECTOR_SIZE, vy, t[0:-1])
+    f = quantize_base(config.VECTOR_SIZE, f, t)
+    az = quantize_base(config.VECTOR_SIZE, az, t)
+    al = quantize_base(config.VECTOR_SIZE, al, t)
+
+    vx = normalize(vx)
+    vy = normalize(vy)
+    f = normalize(f)
+    az = normalize(az)
+    al = normalize(al)
 
     return {
-        "vx": composed(vx),
-        "vy": composed(vy),
-        "vf": composed(vf),
-        "vaz": composed(vaz),
-        "val": composed(val),
+        "vx": vx,
+        "vy": vy,
+        "f": f,
+        "az": az,
+        "al": al,
     }
-
-
-def convert_pattern_flat(raw_data):
-    bean = convert_pattern(raw_data)
-    for val in map(composed, (bean['vx'], bean['vy'], bean['vf'], bean['vaz'], bean['val'])):
-        yield from val
 
 
 def convert_pattern_split(raw_data):
     bean = convert_pattern(raw_data)
-    for val in map(composed, (bean['vx'], bean['vy'], bean['vf'], bean['vaz'], bean['val'])):
+    for val in (bean['vx'], bean['vy'], bean['f'], bean['az'], bean['al']):
         yield val
