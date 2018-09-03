@@ -35,13 +35,15 @@ def build_network(session):
         current_set_id = list(all_data.keys()).index(current_set_name)
         output = get_output(current_set_id, num_sets)
 
-        number_of_test_sets = TEST_PERCENT * len(pattern_set) // 100
+        converted_patterns = list(map(lambda pattern: list(convert_pattern_split(pattern['data'])), pattern_set))
+        # converted_patterns = list(chain(converted_patterns, map(noisify, converted_patterns)))
 
-        for pattern in pattern_set[0:number_of_test_sets]:
-            pattern = list(convert_pattern_split(pattern['data']))
+        number_of_test_sets = TEST_PERCENT * len(converted_patterns) // 100
+
+        # shuffle(converted_patterns)
+        for pattern in converted_patterns[0:number_of_test_sets]:
             neural.add_test(pattern, output)
-        for pattern in pattern_set[number_of_test_sets:]:
-            pattern = list(convert_pattern_split(pattern['data']))
+        for pattern in converted_patterns[number_of_test_sets:]:
             neural.add_train(pattern, output)
 
     random_train = RANDOM_SETS * TEST_PERCENT // 100
