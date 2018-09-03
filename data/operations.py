@@ -1,4 +1,5 @@
 import math
+from random import shuffle
 
 from data.config import WINDOW_SIZE, ORDER, SMOOTH
 
@@ -148,6 +149,12 @@ def average_pattern(patterns):
         "az": average_array(get_value_list(patterns, 'az')),
         "al": average_array(get_value_list(patterns, 'al'))
     }
+
+
+def shuffled(data):
+    new_data = list(data)
+    shuffle(new_data)
+    yield from new_data
 
 
 if __name__ == '__main__':
