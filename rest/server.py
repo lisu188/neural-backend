@@ -93,22 +93,22 @@ class NeuralRestEngine:
 
             return jsonify(output)
 
-        @app.route('/chart/<name>/<type>/<int:id>', methods=['GET'])
-        def chart(name, type, id):
+        @app.route('/chart/<name>/<int:id>', methods=['GET'])
+        def chart(name, id):
             import pygal
             line_chart = pygal.Line(show_dots=False)
             y = self.all_data[name]
-            for key, val in convert_pattern(y[type][id]['data']).items():
+            for key, val in convert_pattern(y[id]['data']).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
 
-        @app.route('/chart/<name>/<type>', methods=['GET'])
-        def avg_chart(name, type):
+        @app.route('/chart/<name>', methods=['GET'])
+        def avg_chart(name):
             import pygal
             line_chart = pygal.Line(show_dots=False)
             y = self.all_data[name]
             for key, val in average_pattern(
-                    list(map(convert_pattern, list(map(lambda x: x['data'], y[type]))))).items():
+                    list(map(convert_pattern, list(map(lambda x: x['data'], y))))).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
 
@@ -118,23 +118,23 @@ class NeuralRestEngine:
             line_chart = pygal.Line(show_dots=False)
             y = load_all()[name]
             for key, val in average_pattern(
-                    list(map(convert_pattern, list(map(lambda x: x['data'], y['train'] + y['test']))))).items():
+                    list(map(convert_pattern, list(map(lambda x: x['data'], y))))).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
 
-        @app.route('/signature/<name>/<type>/<int:id>', methods=['GET'])
-        def signature(name, type, id):
+        @app.route('/signature/<name>/<int:id>', methods=['GET'])
+        def signature(name, id):
             import pygal
             xy_chart = pygal.XY(stroke=False)
             y = load_all()[name]
-            xy_chart.add(name, list(map(lambda point: (point['X'], -point['Y']), y[type][id]['data'])))
+            xy_chart.add(name, list(map(lambda point: (point['X'], -point['Y']), y[id]['data'])))
             return xy_chart.render_response()
 
         @app.route('/rmsd', methods=['GET'])
         def rmsd():
             all_rms = {}
             for key, val in self.all_data.items():
-                all_patterns = val['test'] + val['train']
+                all_patterns = val
                 rms_values = rms(list(map(lambda x: convert_pattern(x['data']), all_patterns)))
                 map_file_to_rms = {}
                 for i in range(len(all_patterns)):
