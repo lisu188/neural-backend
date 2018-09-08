@@ -26,7 +26,6 @@ def locking(lock):
 class NeuralRestEngine:
     def __init__(self):
         self.session = None
-        self.all_data = None
         self.num_sets = None
         self.neural = None
         self.lock = RLock()
@@ -36,8 +35,7 @@ class NeuralRestEngine:
         if self.session:
             self.session.close()
         self.session = tensorflow.Session()
-        self.all_data = load_all()
-        self.num_sets = len(self.all_data)
+        self.num_sets = len(load_all())
         self.neural = build_network(self.session)
         return self.neural.log()
 
@@ -62,7 +60,7 @@ class NeuralRestEngine:
         def use():
             answer = self.neural.use(request.get_json(force=True))[0]
             ret = {}
-            for key, val in zip(list(self.all_data.keys()), answer):
+            for key, val in zip(list(load_all().keys()), answer):
                 ret[str(key)] = float(val)
             return jsonify(ret)
 
@@ -79,7 +77,7 @@ class NeuralRestEngine:
         @app.route('/stats', methods=['GET'])
         def stats():
             ret = {'signatures': {}}
-            for data in self.all_data:
+            for data in load_all():
                 ret['signatures'][data[0]] = len(data[1])
             return jsonify(ret)
 
@@ -96,23 +94,13 @@ class NeuralRestEngine:
         def chart(name, id):
             import pygal
             line_chart = pygal.Line(show_dots=False)
-            y = self.all_data[name]
+            y = load_all()[name]
             for key, val in convert_pattern(y[id]['data']).items():
                 line_chart.add(key, list(val))
             return line_chart.render_response()
 
         @app.route('/chart/<name>', methods=['GET'])
         def avg_chart(name):
-            import pygal
-            line_chart = pygal.Line(show_dots=False)
-            y = self.all_data[name]
-            for key, val in average_pattern(
-                    list(map(convert_pattern, list(map(lambda x: x['data'], y))))).items():
-                line_chart.add(key, list(val))
-            return line_chart.render_response()
-
-        @app.route('/chart/<name>', methods=['GET'])
-        def avg_chart_all(name):
             import pygal
             line_chart = pygal.Line(show_dots=False)
             y = load_all()[name]
@@ -132,7 +120,7 @@ class NeuralRestEngine:
         @app.route('/rmsd', methods=['GET'])
         def rmsd():
             all_rms = {}
-            for key, val in self.all_data.items():
+            for key, val in load_all().items():
                 all_patterns = val
                 rms_values = rms(list(map(lambda x: convert_pattern(x['data']), all_patterns)))
                 map_file_to_rms = {}
