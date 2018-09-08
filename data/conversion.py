@@ -1,4 +1,5 @@
 from data import config
+from data.config import VECTORS
 from data.operations import quantize_base, normalize, differentiate, smooth
 
 
@@ -65,5 +66,5 @@ def convert_pattern(raw_data):
 
 def convert_pattern_split(raw_data):
     bean = convert_pattern(raw_data)
-    for val in (bean['vx'], bean['vy'], bean['f'], bean['az'], bean['al']):
+    for val in (map(lambda val: bean[val], VECTORS)):
         yield val

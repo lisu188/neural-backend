@@ -139,7 +139,7 @@ class NeuralRestEngine:
                 map_file_to_rms = {}
                 for i in range(len(all_patterns)):
                     map_file_to_rms[all_patterns[i]['file']] = {}
-                    for param in ['vx', 'vy', 'f', 'az', 'al']:
+                    for param in VECTORS:
                         map_file_to_rms[all_patterns[i]['file']][param] = rms_values[param][i]
                     map_file_to_rms[all_patterns[i]['file']]['avg'] = avg(
                         *map_file_to_rms[all_patterns[i]['file']].values())

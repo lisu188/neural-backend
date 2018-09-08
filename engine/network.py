@@ -4,7 +4,7 @@ from random import shuffle
 
 import tensorflow as tf
 
-from data.config import SEQUENCE_LENGTH, KEEP_PROB
+from data.config import SEQUENCE_LENGTH, KEEP_PROB, VECTORS
 from data.conversion import convert_pattern_split
 
 
@@ -147,7 +147,7 @@ class Network:
             layers = []
             for i in range(input[0]):
                 layers.append(
-                    self.build_flat_layer("part%s" % i, input[1], output // 5, tf.gather(previousLayer, i, axis=1)))
+                    self.build_flat_layer(VECTORS[i], input[1], output // 5, tf.gather(previousLayer, i, axis=1)))
             return tf.concat(layers, 1)
 
     def get_weights(self):
