@@ -1,7 +1,6 @@
 import os
 from threading import RLock, Thread
 
-import pygal
 import tensorflow
 from flask import Flask, jsonify, request
 
@@ -132,18 +131,6 @@ class NeuralRestEngine:
                         *map_file_to_rms[all_patterns[i]['file']].values())
                 all_rms[key] = sorted(list(map_file_to_rms.items()), key=lambda x: x[1]['avg'], reverse=True)
             return jsonify(all_rms)
-
-        @locking(lock=self.lock)
-        @app.route('/weights', methods=['GET'])
-        def weights():
-            line_chart = pygal.Line(show_dots=False)
-            for layer in self.neural.get_weights()[0:1]:
-                for i in range(len(layer[0])):
-                    serie = []
-                    for index in range(len(layer)):
-                        serie.append(layer[index][i])
-                    line_chart.add(str(i), serie)
-            return line_chart.render_response()
 
         if 'PORT' in os.environ:
             port = int(os.environ['PORT'])
