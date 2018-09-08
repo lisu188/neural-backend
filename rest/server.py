@@ -80,9 +80,7 @@ class NeuralRestEngine:
         def stats():
             ret = {'signatures': {}}
             for data in self.all_data:
-                ret['signatures'][data[0]] = {}
-                ret['signatures'][data[0]]['train'] = len(data[1]['train'])
-                ret['signatures'][data[0]]['test'] = len(data[1]['test'])
+                ret['signatures'][data[0]] = len(data[1])
             return jsonify(ret)
 
         @app.route('/api', methods=['GET'])
