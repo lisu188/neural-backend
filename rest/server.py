@@ -5,6 +5,7 @@ import pygal
 import tensorflow
 from flask import Flask, jsonify, request
 
+from data.config import VECTORS
 from data.conversion import convert_pattern
 from data.operations import average_pattern, rms, avg
 from data.pattern import load_all
