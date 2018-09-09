@@ -24,8 +24,8 @@ class Network:
         self.X = tf.placeholder("float", [None] + self.num_input)
         self.Y = tf.placeholder("float", [None, self.num_classes])
 
-        self.logits = self.build_net(inputs, *hidden,
-                                     classes)
+        self.logits = self.__build_net(inputs, *hidden,
+                                       classes)
         self.prediction = tf.nn.softmax(self.logits)
 
         self.loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
@@ -79,22 +79,10 @@ class Network:
                 self.writer.add_summary(train_summary, self.steps)
                 self.writer.add_summary(test_summary, self.steps)
                 self.writer.add_summary(layers_summary, self.steps)
-            for sequenced in self.sequence():
+            for sequenced in self.__sequence():
                 self.session.run(self.train_op,
                                  feed_dict=sequenced)
             self.steps = self.steps + 1
-
-    def sequence(self):
-        packs = list(zip(self.input, self.output))
-        shuffle(packs)
-        pack_len = len(packs)
-        for i in range((pack_len // SEQUENCE_LENGTH) + 1):
-            first_index = i * SEQUENCE_LENGTH
-            last_index = pack_len if (i + 1) * SEQUENCE_LENGTH > pack_len else (i + 1) * SEQUENCE_LENGTH
-            if first_index != last_index:  # hack for seq_len = 1
-                yield {self.X: list(map(lambda x: x[0], packs[first_index:last_index])),
-                       self.Y: list(map(lambda x: x[1], packs[first_index:last_index])),
-                       self.keep_prob: KEEP_PROB}
 
     def log(self):
         loss, acc = self.session.run([self.loss_op, self.accuracy], feed_dict={self.X: self.input,
@@ -119,7 +107,19 @@ class Network:
         self.input_test.append(input)
         self.output_test.append(output)
 
-    def variable_summaries(self, var, name):
+    def __sequence(self):
+        packs = list(zip(self.input, self.output))
+        shuffle(packs)
+        pack_len = len(packs)
+        for i in range((pack_len // SEQUENCE_LENGTH) + 1):
+            first_index = i * SEQUENCE_LENGTH
+            last_index = pack_len if (i + 1) * SEQUENCE_LENGTH > pack_len else (i + 1) * SEQUENCE_LENGTH
+            if first_index != last_index:  # hack for seq_len = 1
+                yield {self.X: list(map(lambda x: x[0], packs[first_index:last_index])),
+                       self.Y: list(map(lambda x: x[1], packs[first_index:last_index])),
+                       self.keep_prob: KEEP_PROB}
+
+    def __variable_summaries(self, var, name):
         with tf.name_scope(name):
             tf.summary.scalar('mean', tf.reduce_mean(var))
             tf.summary.scalar('stddev', tf.sqrt(tf.reduce_mean(tf.square(var - tf.reduce_mean(var)))))
@@ -127,7 +127,23 @@ class Network:
             tf.summary.scalar('min', tf.reduce_min(var))
             tf.summary.histogram('histogram', var)
 
-    def build_flat_layer(self, name, input, output, previousLayer):
+    def __build_net(self, *struct):
+        with tf.name_scope('layers'):
+            net = self.X
+            for i in range(len(struct) - 1):
+                net = self.__build_layer('layer' + str(i), struct[i], struct[i + 1], net)
+            return net
+
+    def __build_layer(self, name, input, output, previousLayer):
+        if hasattr(input, "__len__"):
+            if len(input) == 2:
+                return self.__build_inflated_layer(name, input, output, previousLayer)
+            else:
+                raise Exception("Not supported length of input:", len(input))
+        else:
+            return self.__build_flat_layer(name, input, output, previousLayer)
+
+    def __build_flat_layer(self, name, input, output, previousLayer):
         with tf.name_scope(name):
             weights = tf.Variable(name='weight', initial_value=tf.random_normal([input, output]))
             biases = tf.Variable(name='bias', initial_value=tf.random_normal([output]))
@@ -135,31 +151,15 @@ class Network:
                 tf.add(tf.matmul(previousLayer, weights),
                        biases))
             layer = tf.nn.dropout(layer, self.keep_prob)
-            self.variable_summaries(weights, 'weights')
-            self.variable_summaries(biases, 'biases')
+            self.__variable_summaries(weights, 'weights')
+            self.__variable_summaries(biases, 'biases')
             tf.summary.histogram('activation', layer)
             return layer
 
-    def build_inflated_layer(self, name, input, output, previousLayer):
+    def __build_inflated_layer(self, name, input, output, previousLayer):
         with tf.name_scope(name):
             layers = []
             for i in range(input[0]):
                 layers.append(
-                    self.build_flat_layer(VECTORS[i], input[1], output // 5, tf.gather(previousLayer, i, axis=1)))
+                    self.__build_flat_layer(VECTORS[i], input[1], output // 5, tf.gather(previousLayer, i, axis=1)))
             return tf.concat(layers, 1)
-
-    def build_layer(self, name, input, output, previousLayer):
-        if hasattr(input, "__len__"):
-            if len(input) == 2:
-                return self.build_inflated_layer(name, input, output, previousLayer)
-            else:
-                raise Exception("Not supported length of input:", len(input))
-        else:
-            return self.build_flat_layer(name, input, output, previousLayer)
-
-    def build_net(self, *struct):
-        with tf.name_scope('layers'):
-            net = self.X
-            for i in range(len(struct) - 1):
-                net = self.build_layer('layer' + str(i), struct[i], struct[i + 1], net)
-            return net
