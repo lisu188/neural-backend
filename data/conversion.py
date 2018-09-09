@@ -28,12 +28,13 @@ def convert_pattern(raw_data):
     # sort by time
     sorted_data = sorted(raw_data, key=lambda ob: ob['Timestamp'])
 
-    t = get_value_list(sorted_data, 'Timestamp')  # get time vector
-    x = get_value_list(sorted_data, 'X')  # get X vector
-    y = get_value_list(sorted_data, 'Y')  # get Y vector
-    f = get_value_list(sorted_data, 'Force')  # get Force vector
-    az = get_value_list(sorted_data, 'AzimuthAngle')  # get azimuth vector
-    al = get_value_list(sorted_data, 'AltitudeAngle')  # get altitude angle vector
+    # separate vectors
+    t = get_value_list(sorted_data, 'Timestamp')
+    x = get_value_list(sorted_data, 'X')
+    y = get_value_list(sorted_data, 'Y')
+    f = get_value_list(sorted_data, 'Force')
+    az = get_value_list(sorted_data, 'AzimuthAngle')
+    al = get_value_list(sorted_data, 'AltitudeAngle')
 
     # calculate speed according to x and y
     vx = differentiate(x, t)
