@@ -10,7 +10,6 @@ from data.conversion import convert_pattern_split
 
 class Network:
     def __init__(self, session, inputs, classes, hidden):
-        self.weights = []
         self.session = session
         self.output_test = []
         self.input_test = []
@@ -131,7 +130,6 @@ class Network:
     def build_flat_layer(self, name, input, output, previousLayer):
         with tf.name_scope(name):
             weights = tf.Variable(name='weight', initial_value=tf.random_normal([input, output]))
-            self.weights.append(weights)
             biases = tf.Variable(name='bias', initial_value=tf.random_normal([output]))
             layer = tf.nn.relu(
                 tf.add(tf.matmul(previousLayer, weights),
@@ -149,9 +147,6 @@ class Network:
                 layers.append(
                     self.build_flat_layer(VECTORS[i], input[1], output // 5, tf.gather(previousLayer, i, axis=1)))
             return tf.concat(layers, 1)
-
-    def get_weights(self):
-        return list(map(self.session.run, self.weights))
 
     def build_layer(self, name, input, output, previousLayer):
         if hasattr(input, "__len__"):
