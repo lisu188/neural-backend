@@ -78,15 +78,6 @@ class NeuralRestEngine:
                 ret['signatures'][data[0]] = len(data[1])
             return jsonify(ret)
 
-        @app.route('/api', methods=['GET'])
-        def api():
-            output = []
-            for rule in app.url_map.iter_rules():
-                methods = list(filter(lambda x: x != 'HEAD' and x != 'OPTIONS', rule.methods))
-                output.append({"endpoint": str(rule), "methods": methods})
-
-            return jsonify(output)
-
         @app.route('/chart/<name>/<int:id>', methods=['GET'])
         def chart(name, id):
             import pygal
@@ -130,6 +121,15 @@ class NeuralRestEngine:
                 all_rms[key] = sorted(list(map_file_to_rms.items()), key=lambda x: x[1]['avg'], reverse=True)
             return jsonify(all_rms)
 
+        @app.route('/api', methods=['GET'])
+        def api():
+            output = []
+            for rule in app.url_map.iter_rules():
+                methods = list(filter(lambda x: x != 'HEAD' and x != 'OPTIONS', rule.methods))
+                output.append({"endpoint": str(rule), "methods": methods})
+
+            return jsonify(output)
+        
         if 'PORT' in os.environ:
             port = int(os.environ['PORT'])
         else:
