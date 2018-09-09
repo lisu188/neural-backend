@@ -25,36 +25,46 @@ def compose(a, b):
 
 
 def convert_pattern(raw_data):
+    # sort by time
     sorted_data = sorted(raw_data, key=lambda ob: ob['Timestamp'])
 
-    t = get_value_list(sorted_data, 'Timestamp')
-    x = get_value_list(sorted_data, 'X')
-    y = get_value_list(sorted_data, 'Y')
-    f = get_value_list(sorted_data, 'Force')
-    az = get_value_list(sorted_data, 'AzimuthAngle')
-    al = get_value_list(sorted_data, 'AltitudeAngle')
+    t = get_value_list(sorted_data, 'Timestamp')  # get time vector
+    x = get_value_list(sorted_data, 'X')  # get X vector
+    y = get_value_list(sorted_data, 'Y')  # get Y vector
+    f = get_value_list(sorted_data, 'Force')  # get Force vector
+    az = get_value_list(sorted_data, 'AzimuthAngle')  # get azimuth vector
+    al = get_value_list(sorted_data, 'AltitudeAngle')  # get altitude angle vector
 
+    # calculate speed according to x and y
     vx = differentiate(x, t)
     vy = differentiate(y, t)
 
-    vx = quantize_base(config.VECTOR_SIZE, vx, t[0:-1])
-    vy = quantize_base(config.VECTOR_SIZE, vy, t[0:-1])
+    # strech/shorten vector (size less than one becasue of differentation implementation
+    vx = quantize_base(config.VECTOR_SIZE, vx,
+                       t[0:-1])
+    vy = quantize_base(config.VECTOR_SIZE, vy,
+                       t[0:-1])
     f = quantize_base(config.VECTOR_SIZE, f, t)
-    az = quantize_base(config.VECTOR_SIZE, az, t)
-    al = quantize_base(config.VECTOR_SIZE, al, t)
+    az = quantize_base(config.VECTOR_SIZE, az,
+                       t)
+    al = quantize_base(config.VECTOR_SIZE, al,
+                       t)
 
+    # apply savitsky golay
     vx = smooth(vx)
     vy = smooth(vy)
     f = smooth(f)
     az = smooth(az)
     al = smooth(al)
 
+    # normalize to -0.5,0.5
     vx = normalize(vx)
     vy = normalize(vy)
     f = normalize(f)
     az = normalize(az)
     al = normalize(al)
 
+    # pack values
     return {
         "vx": vx,
         "vy": vy,
