@@ -25,7 +25,6 @@ def locking(lock):
 class NeuralRestEngine:
     def __init__(self):
         self.session = None
-        self.num_sets = None
         self.neural = None
         self.lock = RLock()
         self.reload()
@@ -34,7 +33,6 @@ class NeuralRestEngine:
         if self.session:
             self.session.close()
         self.session = tensorflow.Session()
-        self.num_sets = len(load_all())
         self.neural = build_network(self.session)
         return self.neural.log()
 
