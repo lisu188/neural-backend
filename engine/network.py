@@ -62,8 +62,10 @@ class Network:
     def train(self, steps):
         for step in range(0, steps):
             if self.steps % 1000 == 0:
+                # log to command line
                 print(self.log())
             if self.steps % 100 == 0:
+                # prepare statistic data for charts
                 train_summary = self.session.run(self.merged_train,
                                                  feed_dict={self.X: self.input,
                                                             self.Y: self.output,
@@ -76,9 +78,11 @@ class Network:
                                                   feed_dict={self.X: self.input_test,
                                                              self.Y: self.output_test,
                                                              self.keep_prob: 1})
+                # write statistic data to file
                 self.writer.add_summary(train_summary, self.steps)
                 self.writer.add_summary(test_summary, self.steps)
                 self.writer.add_summary(layers_summary, self.steps)
+            # perform an epoch of stochastic training
             for sequenced in self.__sequence():
                 self.session.run(self.train_op,
                                  feed_dict=sequenced)
