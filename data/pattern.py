@@ -17,6 +17,7 @@ def load_all():
             for file in shuffled(os.listdir(os.path.join(PATH, dir))):
                 _PATTERNS[dir].append(
                     {"file": file, "data": json.loads(open(os.path.join(PATH, dir, file)).read())})
+        return load_all()
     else:
         return _PATTERNS
 
