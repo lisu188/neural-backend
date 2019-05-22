@@ -4,6 +4,7 @@ from threading import RLock, Thread
 import tensorflow
 from flask import Flask, jsonify, request
 
+from data.cache import invalidate_cache
 from data.config import VECTORS
 from data.conversion import convert_pattern
 from data.operations import average_pattern, rms, avg
@@ -30,6 +31,7 @@ class NeuralRestEngine:
         self.reload()
 
     def reload(self):
+        invalidate_cache()
         if self.session:
             self.session.close()
         self.session = tensorflow.Session()
@@ -129,7 +131,7 @@ class NeuralRestEngine:
                 output.append({"endpoint": str(rule), "methods": methods})
 
             return jsonify(output)
-        
+
         if 'PORT' in os.environ:
             port = int(os.environ['PORT'])
         else:

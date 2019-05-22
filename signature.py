@@ -1,12 +1,11 @@
 import argparse
+from multiprocessing import Pool
 
 import tensorflow
 
-from data.pattern import load_all
+from data.pattern import load_all, upload_all
 from engine.runner import build_network
 from rest.server import NeuralRestEngine
-
-from multiprocessing import Pool
 
 
 def test_network(ite):
@@ -27,6 +26,8 @@ if __name__ == '__main__':
                         help="show database statistics", action="store_true")
     parser.add_argument("--models", type=int,
                         help="how many models to train")
+    parser.add_argument("--upload",
+                        help="upload local patterns to database", action="store_true")
     args = parser.parse_args()
 
     if args.train:
@@ -43,4 +44,5 @@ if __name__ == '__main__':
             print('\t', 'test', len(val['test']))
     elif args.server:
         NeuralRestEngine().run_server()
-
+    elif args.upload:
+        upload_all()
