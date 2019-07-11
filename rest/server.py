@@ -77,7 +77,7 @@ class NeuralRestEngine:
         def stats():
             ret = {'signatures': {}}
             for data in load_all():
-                ret['signatures'][data[0]] = len(data[1])
+                ret['signatures'][data] = len(load_all()[data])
             return jsonify(ret)
 
         @app.route('/chart/<name>/<int:id>', methods=['GET'])
