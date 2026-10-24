@@ -27,7 +27,9 @@ python3 signature.py --stats
 python3 signature.py --models 4 --train 1000
 ```
 
-The original deployment configuration starts the same server entry point through the included `Procfile`.
+The server binds to `127.0.0.1` by default. The API has no built-in authentication and can train or reload the shared model and return stored patterns, so keep it local unless an authenticated reverse proxy restricts access. Remote deployments must explicitly choose a bind address with `NEURAL_HOST` (for example, `NEURAL_HOST=0.0.0.0` behind that proxy); `PORT` still selects the port, defaulting to 5000.
+
+The original deployment configuration starts the same server entry point through the included `Procfile`; remote hosting now requires that explicit bind configuration.
 
 ## Structure
 
@@ -45,3 +47,4 @@ The original deployment configuration starts the same server entry point through
 ## Running today
 
 `requirements.txt` records the historical top-level dependencies, but versions are not pinned and modern TensorFlow releases are not API-compatible with this code. Reproducing the original environment therefore requires an appropriately old Python/TensorFlow stack or a migration of the session-based code.
+
