@@ -137,4 +137,5 @@ class NeuralRestEngine:
         else:
             port = 5000
 
-        app.run(host='0.0.0.0', port=port)
+        app.run(host=(os.environ.get('NEURAL_HOST') or '127.0.0.1'), port=port)
+
