@@ -2,3 +2,7 @@
 *.iml
 .idea/*
 *.dat
+
+__pycache__/
+.venv-legacy/
+legacy-resolved.txt

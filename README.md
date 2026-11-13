@@ -46,5 +46,58 @@ The original deployment configuration starts the same server entry point through
 
 ## Running today
 
-`requirements.txt` records the historical top-level dependencies, but versions are not pinned and modern TensorFlow releases are not API-compatible with this code. Reproducing the original environment therefore requires an appropriately old Python/TensorFlow stack or a migration of the session-based code.
+`requirements.txt` records the top-level dependencies, including the previously
+missing `requests` import. Installing its unconstrained TensorFlow on a current
+Python interpreter does not reproduce this session-based application.
 
+`requirements-legacy.txt` is a candidate compatibility profile for CPython 3.7
+on Linux x86-64. It selects TensorFlow 1.15.5 and NumPy 1.18.5 and constrains the
+older Flask/Protobuf dependencies. It is not a complete transitive lock or a
+claim that installation and training have passed. The original `runtime.txt`
+records Python 3.6.5; it remains historical deployment metadata.
+
+In an isolated CPython 3.7 environment:
+
+```bash
+python3.7 -m venv .venv-legacy
+.venv-legacy/bin/python -m pip install 'pip==24.0' 'setuptools==59.6.0' 'wheel==0.37.1'
+.venv-legacy/bin/python -m pip install -r requirements-legacy.txt
+.venv-legacy/bin/python -m pip check
+.venv-legacy/bin/python -c 'import tensorflow as tf; assert tf.__version__ == "1.15.5"; print(tf.Session)'
+.venv-legacy/bin/python signature.py --train 1
+.venv-legacy/bin/python -m pip freeze > legacy-resolved.txt
+```
+
+Keep the resolved versions and actual smoke results together before describing
+that environment as reproduced. A Python 3/TensorFlow 2 migration remains
+separate work. The versions above are supported by their historical package
+metadata: [TensorFlow 1.15.5](https://pypi.org/project/tensorflow/1.15.5/),
+[NumPy 1.18.5](https://pypi.org/project/numpy/1.18.5/),
+[Flask 1.1.4](https://pypi.org/project/Flask/1.1.4/), and
+[Requests 2.27.1](https://pypi.org/project/requests/2.27.1/).
+
+### Pattern source and offline checks
+
+The default data source is now the checked-in `patterns/` directory. Set
+`NEURAL_PATTERN_DIR` to use another local directory with the same class/JSON
+layout. Loading local patterns does not contact the former HTTP service.
+`NEURAL_PATTERN_URL` explicitly selects an HTTPS ZIP endpoint instead; downloads
+have a timeout and size limits, and unsafe archive paths are rejected before
+extraction. `--upload` also requires this explicit HTTPS endpoint.
+
+The source/configuration checks need only a current Python interpreter:
+
+```bash
+python3 -m unittest discover -s tests -v
+python3 -m compileall -q data engine rest gui signature.py
+```
+
+`--help` and `--stats` work without TensorFlow, Flask or site packages. Statistics
+count each local class and use the engine's existing floored test percentage;
+training imports TensorFlow only when requested, and the server imports its HTTP
+stack only for `--server`. Multiple-model training uses a managed process pool.
+
+The checks include real `python -S signature.py --help/--stats` subprocesses,
+local loading, remote source admission, archive traversal rejection and server
+binding. Pool orchestration is tested separately from training. None of these
+checks instantiate or validate TensorFlow.

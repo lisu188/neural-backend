@@ -1,0 +1,13 @@
+# Candidate reproduction profile for CPython 3.7 on Linux x86-64.
+# Direct dependencies and known compatibility constraints; not a frozen full lock.
+tensorflow==1.15.5
+numpy==1.18.5
+Flask==1.1.4
+pygal==2.4.0
+requests==2.27.1
+Jinja2==2.11.3
+MarkupSafe==1.1.1
+Werkzeug==1.0.1
+itsdangerous==1.1.0
+click==7.1.2
+protobuf==3.20.3
