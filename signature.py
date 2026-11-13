@@ -1,14 +1,14 @@
 import argparse
 from multiprocessing import Pool
 
-import tensorflow
-
+from data.config import TEST_PERCENT
 from data.pattern import load_all, upload_all
-from engine.runner import build_network
-from rest.server import NeuralRestEngine
 
 
 def test_network(ite):
+    import tensorflow
+    from engine.runner import build_network
+
     with tensorflow.Session() as sess:
         neural = build_network(sess)
         neural.train(ite)
@@ -32,17 +32,20 @@ if __name__ == '__main__':
 
     if args.train:
         if args.models:
-            pool = Pool(args.models)
-            pool.map(test_network, [args.train] * args.models)
-            pool.join()
+            with Pool(args.models) as pool:
+                pool.map(test_network, [args.train] * args.models)
         else:
             test_network(args.train)
     elif args.stats:
         for key, val in load_all().items():
-            print(key, len(val['train']) + len(val['test']))
-            print('\t', 'train', len(val['train']))
-            print('\t', 'test', len(val['test']))
+            test_count = TEST_PERCENT * len(val) // 100
+            print(key, len(val))
+            print('\t', 'train', len(val) - test_count)
+            print('\t', 'test', test_count)
     elif args.server:
+        from rest.server import NeuralRestEngine
+
         NeuralRestEngine().run_server()
     elif args.upload:
         upload_all()
+

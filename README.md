@@ -92,5 +92,12 @@ python3 -m unittest discover -s tests -v
 python3 -m compileall -q data engine rest gui signature.py
 ```
 
-These checks exercise local loading, remote source admission, archive traversal
-rejection and server binding. They do not instantiate or validate TensorFlow.
+`--help` and `--stats` work without TensorFlow, Flask or site packages. Statistics
+count each local class and use the engine's existing floored test percentage;
+training imports TensorFlow only when requested, and the server imports its HTTP
+stack only for `--server`. Multiple-model training uses a managed process pool.
+
+The checks include real `python -S signature.py --help/--stats` subprocesses,
+local loading, remote source admission, archive traversal rejection and server
+binding. Pool orchestration is tested separately from training. None of these
+checks instantiate or validate TensorFlow.
